@@ -1,0 +1,134 @@
+on post-fs
+    write /sys/block/zram0/comp_algorithm lz4
+    write /sys/block/zram0/max_comp_streams 4
+    write /sys/block/zram0/disksize 533413200
+
+    write /proc/sys/vm/page-cluster 0
+    write /proc/sys/vm/swappiness 60
+
+on property:sys.boot_completed=1
+    # allows FKUpdater to know this feature is supported
+    setprop fku.profiles 1
+
+    # according to Qcom this legacy value improves first launch latencies
+    # stock value is 512k
+    setprop dalvik.vm.heapminfree 2m
+
+    chown system system /sys/devices/platform/kcal_ctrl.0/kcal
+    chown system system /sys/devices/platform/kcal_ctrl.0/kcal_cont
+    chown system system /sys/devices/platform/kcal_ctrl.0/kcal_hue
+    chown system system /sys/devices/platform/kcal_ctrl.0/kcal_invert
+    chown system system /sys/devices/platform/kcal_ctrl.0/kcal_sat
+    chown system system /sys/devices/platform/kcal_ctrl.0/kcal_val
+    chmod 0664 /sys/devices/platform/kcal_ctrl.0/kcal
+    chmod 0664 /sys/devices/platform/kcal_ctrl.0/kcal_cont
+    chmod 0664 /sys/devices/platform/kcal_ctrl.0/kcal_hue
+    chmod 0664 /sys/devices/platform/kcal_ctrl.0/kcal_invert
+    chmod 0664 /sys/devices/platform/kcal_ctrl.0/kcal_sat
+    chmod 0664 /sys/devices/platform/kcal_ctrl.0/kcal_val
+
+#    chown system:system /sys/devices/virtual/graphics/fb0/hbm
+#    chmod 0664 /sys/devices/virtual/graphics/fb0/hbm
+
+    chown system system /sys/class/devfreq/fdb00000.qcom,kgsl-3d0/governor
+    chown system system /sys/class/devfreq/fdb00000.qcom,kgsl-3d0/max_freq
+    chown system system /sys/class/devfreq/fdb00000.qcom,kgsl-3d0/min_freq
+    chmod 0664 /sys/class/devfreq/fdb00000.qcom,kgsl-3d0/governor
+    chmod 0664 /sys/class/devfreq/fdb00000.qcom,kgsl-3d0/max_freq
+    chmod 0664 /sys/class/devfreq/fdb00000.qcom,kgsl-3d0/min_freq
+
+    # cpufreq settings
+    chown system system /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+    chown system system /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq
+    chown system system /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
+    chown system system /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq
+    chown system system /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+    chown system system /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor
+    chmod 0664 /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+    chmod 0664 /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq
+    chmod 0664 /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
+    chmod 0664 /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq
+    chmod 0664 /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+    chmod 0664 /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor
+
+    # Little cluster
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/use_sched_load 0
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/above_hispeed_delay 0
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/go_hispeed_load 100
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/hispeed_freq 0
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/target_loads "70 1017600:50 1190400:65 1305600:80 1382400:90 1401600:95"
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/timer_rate 20000
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/min_sample_time 40000
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/ignore_hispeed_on_notif 1
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/max_freq_hysteresis 80000
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/timer_slack 30000
+    write /sys/devices/system/cpu/cpu0/cpufreq/interactive/io_is_busy 1
+
+    # big cluster
+    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/use_sched_load 0
+    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/above_hispeed_delay "20000 1113600:40000 1612800:20000"
+    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/go_hispeed_load 85
+    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/hispeed_freq 1113600
+    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/target_loads "90 1382400:95"
+    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/timer_rate 30000
+    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/min_sample_time 30000
+    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/ignore_hispeed_on_notif 1
+    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/max_freq_hysteresis 80000
+    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/timer_slack 30000
+    write /sys/devices/system/cpu/cpu4/cpufreq/interactive/io_is_busy 1
+
+    # cpu-boost
+    write /sys/module/cpu_boost/parameters/input_boost_freq "0:1190400 4:998400"
+    write /sys/module/cpu_boost/parameters/input_boost_ms 150
+
+    # set (super) packing parameters
+    write /sys/devices/system/cpu/cpu0/sched_mostly_idle_freq 0
+    write /sys/devices/system/cpu/cpu4/sched_mostly_idle_freq 0
+
+    # I/O
+    write /sys/block/mmcblk0/queue/rq_affinity 0
+    write /sys/block/mmcblk0/queue/add_random 0
+    write /sys/block/mmcblk0/bdi/min_ratio 5
+    write /sys/block/mmcblk0/queue/read_ahead_kb 128
+    
+    # ksm
+    write /sys/kernel/mm/ksm/sleep_millisecs 1500
+    write /sys/kernel/mm/ksm/pages_to_scan 256
+    write /sys/kernel/mm/ksm/deferred_timer 1
+    write /sys/kernel/mm/ksm/run 0
+
+    # misc
+    write /sys/class/timed_output/vibrator/vmax_mv_strong 1250
+
+    # Enabling QC2.0. It can charge up-to 3A depending on the charger
+    write /sys/module/qpnp_smbcharger/parameters/default_dcp_icl_ma 3000
+    write /sys/module/qpnp_smbcharger/parameters/default_hvdcp_icl_ma 3000
+    write /sys/module/qpnp_smbcharger/parameters/default_hvdcp3_icl_ma 3000
+
+    # Prevent mmc from scaling its clk down when performing writes
+    write /sys/class/mmc_host/mmc0/clk_scaling/scale_down_in_low_wr_load 1
+
+    # rip
+    write /sys/module/wakeup/parameters/enable_qcom_rx_wakelock_ws 0
+    write /sys/module/wakeup/parameters/enable_wlan_extscan_wl_ws 0
+    write /sys/module/wakeup/parameters/enable_ipa_ws 0
+    write /sys/module/wakeup/parameters/enable_wlan_wow_wl_ws 0
+    write /sys/module/wakeup/parameters/enable_wlan_ws 0
+    write /sys/module/wakeup/parameters/enable_timerfd_ws 0
+    write /sys/module/wakeup/parameters/enable_netlink_ws 0
+    write /sys/module/wakeup/parameters/enable_netmgr_wl_ws 0
+
+    # Setting b.L scheduler parameters
+    write /proc/sys/kernel/sched_boost 0
+    write /proc/sys/kernel/sched_migration_fixup 1
+    write /proc/sys/kernel/sched_upmigrate 95
+    write /proc/sys/kernel/sched_downmigrate 90
+    write /proc/sys/kernel/sched_freq_inc_notify 400000
+    write /proc/sys/kernel/sched_freq_dec_notify 400000
+    write /proc/sys/kernel/sched_spill_nr_run 3
+    write /proc/sys/kernel/sched_init_task_load 100
+
+    exec u:r:init:s0 root root -- /init.supolicy.sh
+    exec u:r:init:s0 root root -- /init.special_power.sh
+    exec u:r:supersu:s0 root root -- /init.supolicy.sh
+    exec u:r:supersu:s0 root root -- /init.special_power.sh
