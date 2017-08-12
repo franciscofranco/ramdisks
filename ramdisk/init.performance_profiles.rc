@@ -1,0 +1,32 @@
+# Power saving profile
+on property:fku.perf.profile=0
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 307200
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 1190400
+    write /sys/devices/system/cpu/cpu2/cpufreq/scaling_max_freq 729600
+    write /sys/devices/system/cpu/cpu2/cpufreq/interactive/hispeed_freq 556800
+    write /sys/module/cpu_boost/parameters/input_boost_freq "0:729600 2:729600"
+    write /sys/module/cpu_boost/parameters/input_boost_ms 1500
+    write /sys/class/kgsl/kgsl-3d0/devfreq/governor powersave
+    write /sys/class/leds/lcd-backlight/max_brightness 100
+
+# Balance (FK defaults)
+on property:fku.perf.profile=1
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 307200
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 1478400
+    write /sys/devices/system/cpu/cpu2/cpufreq/scaling_max_freq 2150400
+    write /sys/devices/system/cpu/cpu2/cpufreq/interactive/hispeed_freq 883200
+    write /sys/module/cpu_boost/parameters/input_boost_freq "0:1228800 2:883200"
+    write /sys/module/cpu_boost/parameters/input_boost_ms 150
+    write /sys/class/kgsl/kgsl-3d0/devfreq/governor msm-adreno-tz
+    write /sys/class/leds/lcd-backlight/max_brightness 255
+
+# Performance
+on property:fku.perf.profile=2
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 691200
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq 1478400
+    write /sys/devices/system/cpu/cpu2/cpufreq/scaling_max_freq 2150400
+    write /sys/devices/system/cpu/cpu2/cpufreq/interactive/hispeed_freq 1785600
+    write /sys/module/cpu_boost/parameters/input_boost_freq "0:1478400 2:1555200"
+    write /sys/module/cpu_boost/parameters/input_boost_ms 1500
+    write /sys/class/kgsl/kgsl-3d0/devfreq/governor performance
+    write /sys/class/leds/lcd-backlight/max_brightness 255
