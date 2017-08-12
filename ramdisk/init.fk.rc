@@ -1,0 +1,113 @@
+on early-init
+    write /sys/block/mmcblk0/queue/scheduler noop
+    write /sys/block/mmcblk0/queue/read_ahead_kb 2048
+    write /sys/block/dm-0/queue/read_ahead_kb 2048
+
+on post-fs
+    write /dev/cpuset/foreground/cpus 0-3
+    write /dev/cpuset/foreground/boost/cpus 0-3
+    write /dev/cpuset/background/cpus 0-3
+    write /dev/cpuset/system-background/cpus 0-3
+
+on property:sys.boot_completed=1
+    # allows FKUpdater to know this feature is supported
+    setprop fku.profiles 1
+
+    # according to Qcom this legacy value improves first launch latencies
+    # stock value is 512k
+    setprop dalvik.vm.heapminfree 2m
+
+    write /dev/cpuset/foreground/cpus 0-2
+    write /dev/cpuset/foreground/boost/cpus 0-2
+    write /dev/cpuset/background/cpus 0
+    write /dev/cpuset/system-background/cpus 0-1
+
+    chown system system /sys/class/leds/charging/brightness
+    chown system system /sys/class/leds/charging/max_brightness
+    chmod 0664 /sys/class/leds/charging/brightness
+    chmod 0664 /sys/class/leds/charging/max_brightness
+
+    chown system system /sys/devices/platform/kcal_ctrl.0/kcal
+    chown system system /sys/devices/platform/kcal_ctrl.0/kcal_cont
+    chown system system /sys/devices/platform/kcal_ctrl.0/kcal_hue
+    chown system system /sys/devices/platform/kcal_ctrl.0/kcal_invert
+    chown system system /sys/devices/platform/kcal_ctrl.0/kcal_sat
+    chown system system /sys/devices/platform/kcal_ctrl.0/kcal_val
+    chmod 0664 /sys/devices/platform/kcal_ctrl.0/kcal
+    chmod 0664 /sys/devices/platform/kcal_ctrl.0/kcal_cont
+    chmod 0664 /sys/devices/platform/kcal_ctrl.0/kcal_hue
+    chmod 0664 /sys/devices/platform/kcal_ctrl.0/kcal_invert
+    chmod 0664 /sys/devices/platform/kcal_ctrl.0/kcal_sat
+    chmod 0664 /sys/devices/platform/kcal_ctrl.0/kcal_val
+
+    chown system system /sys/class/devfreq/fdb00000.qcom,kgsl-3d0/max_freq
+    chown system system /sys/class/devfreq/fdb00000.qcom,kgsl-3d0/min_freq
+    chmod 0664 /sys/class/devfreq/fdb00000.qcom,kgsl-3d0/max_freq
+    chmod 0664 /sys/class/devfreq/fdb00000.qcom,kgsl-3d0/min_freq
+
+    # cpufreq settings
+    chown system system /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+    chown system system /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
+    chown system system /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+    chmod 0664 /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+    chmod 0664 /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
+    chmod 0664 /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+
+    write /sys/devices/system/cpu/cpufreq/interactive/above_hispeed_delay 0
+    write /sys/devices/system/cpu/cpufreq/interactive/go_hispeed_load 100
+    write /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq 0
+    write /sys/devices/system/cpu/cpufreq/interactive/io_is_busy 1
+    write /sys/devices/system/cpu/cpufreq/interactive/target_loads "85 652800:45 729600:50 960000:55 1267200:60 1574400:65 1728000:70 1958400:75 2265600:80 2457600:85 2649600:95"
+    write /sys/devices/system/cpu/cpufreq/interactive/min_sample_time 40000
+    write /sys/devices/system/cpu/cpufreq/interactive/timer_rate 20000
+    write /sys/devices/system/cpu/cpufreq/interactive/max_freq_hysteresis 60000
+    write /sys/devices/system/cpu/cpufreq/interactive/timer_slack 30000
+
+    # Set base GPU idle frequency to its minimum (stock sets one step above minimum)
+    write /sys/class/kgsl/kgsl-3d0/default_pwrlevel 4
+
+    # battery LED
+    write /sys/class/leds/charging/trigger battery-charging
+    write /sys/class/leds/charging/max_brightness 0
+
+    # sched
+    write /dev/cpuctl/cpu.notify_on_migrate 0
+
+    # cpu-boost
+    write /sys/module/cpu_boost/parameters/input_boost_freq 1728000
+    write write /sys/module/cpu_boost/parameters/input_boost_ms 150
+
+    # thermals
+    write /sys/module/msm_thermal/core_control/enabled 0
+
+    # Re-enable BCL
+    write /sys/module/battery_current_limit/parameters/bcl_hotplug_enable 1
+
+    # I/O
+    write /sys/block/mmcblk0/queue/read_ahead_kb 128
+    write /sys/block/mmcblk0/queue/rq_affinity 0
+    write /sys/block/mmcblk0/queue/add_random 0
+    write /sys/block/mmcblk0/bdi/min_ratio 5
+    write /sys/class/mmc_host/mmc0/clk_scaling/scale_down_in_low_wr_load 1
+    write /sys/block/dm-0/queue/read_ahead_kb 128
+    write /sys/block/dm-0/queue/rq_affinity 0
+    
+    # ksm
+    write /sys/kernel/mm/ksm/sleep_millisecs 1500
+    write /sys/kernel/mm/ksm/pages_to_scan 256
+    write /sys/kernel/mm/ksm/deferred_timer 1
+    write /sys/kernel/mm/ksm/run 0
+
+    # bcmdhd wakeup sources
+    write /sys/module/wakeup/parameters/enable_wlan_rx_wake_ws 0
+    write /sys/module/wakeup/parameters/enable_wlan_ctrl_wake_ws 0
+    write /sys/module/wakeup/parameters/enable_wlan_wake_ws 0
+    write /sys/module/wakeup/parameters/enable_msm_hsic_ws 0
+    write /sys/module/wakeup/parameters/enable_si_ws 0
+    write /sys/module/wakeup/parameters/enable_timerfd_ws 0
+    write /sys/module/wakeup/parameters/enable_netlink_ws 0
+
+    exec u:r:su:s0 root root -- /init.supolicy.sh
+    exec u:r:su:s0 root root -- /init.special_power.sh
+    exec u:r:supersu:s0 root root -- /init.supolicy.sh
+    exec u:r:supersu:s0 root root -- /init.special_power.sh
