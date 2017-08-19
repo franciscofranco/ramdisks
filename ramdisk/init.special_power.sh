@@ -27,21 +27,20 @@ function writepid_top_app() {
 }
 ################################################################################
 
-sleep 10
+sleep 5
 
-write /sys/devices/system/cpu/cpu0/cpufreq/interactive/enable_prediction 1
 write /sys/devices/system/cpu/cpu0/cpufreq/interactive/above_hispeed_delay 0
 write /sys/devices/system/cpu/cpu0/cpufreq/interactive/go_hispeed_load 100
 write /sys/devices/system/cpu/cpu0/cpufreq/interactive/hispeed_freq 0
-write /sys/devices/system/cpu/cpu0/cpufreq/interactive/target_loads "70 672000:45 825600:50 1036800:60 1248000:70 1478400:85 1747200:95"
+write /sys/devices/system/cpu/cpu0/cpufreq/interactive/target_loads "70 672000:45 825600:50 1036800:60 1248000:70 1478400:85"
 write /sys/devices/system/cpu/cpu0/cpufreq/interactive/min_sample_time 40000
+write /sys/devices/system/cpu/cpu0/cpufreq/interactive/timer_rate 30000
 
-write /sys/devices/system/cpu/cpu4/cpufreq/interactive/hispeed_freq 902400
+write /sys/devices/system/cpu/cpu4/cpufreq/interactive/go_hispeed_load 99
+write /sys/devices/system/cpu/cpu4/cpufreq/interactive/hispeed_freq 1574400
 write /sys/devices/system/cpu/cpu4/cpufreq/interactive/above_hispeed_delay "19000 1400000:39000 1700000:19000 2100000:79000"
 write /sys/devices/system/cpu/cpu4/cpufreq/interactive/target_loads "85 1728000:80 2112000:90 2342400:95"
-write /sys/devices/system/cpu/cpu4/cpufreq/interactive/enable_prediction 1
 write /sys/devices/system/cpu/cpu4/cpufreq/interactive/timer_rate 30000
-write /sys/devices/system/cpu/cpu4/cpufreq/interactive/ignore_hispeed_on_notif 1
 write /sys/devices/system/cpu/cpu4/cpufreq/interactive/min_sample_time 19000
 write /sys/devices/system/cpu/cpu4/cpufreq/interactive/max_freq_hysteresis 39000
 
@@ -53,7 +52,6 @@ write /dev/cpuset/system-background/cpus 0-2
 
 sleep 20
 
-FINGERPRINTD=`pidof fingerprintd`
 QSEECOMD=`pidof qseecomd`
 THERMAL-ENGINE=`pidof thermal-engine`
 TIME_DAEMON=`pidof time_daemon`
@@ -79,7 +77,6 @@ SEEMP_HEALTHD=`pidof seemp_healthd`
 ESEPMDAEMON=`pidof esepmdaemon`
 WPA_SUPPLICANT=`pidof wpa_supplicant`
 
-writepid_top_app $FINGERPRINTD
 writepid_sbg $QSEECOMD
 writepid_sbg $THERMAL-ENGINE
 writepid_sbg $TIME_DAEMON
