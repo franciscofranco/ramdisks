@@ -2,9 +2,9 @@
 # osm0sis @ xda-developers
 
 ## AnyKernel setup
-# EDIFY properties
+# begin properties
 properties() {
-kernel.string=FrancoKernel by franciscofranco @ xda-developers
+kernel.string=Franco Kernel by franciscofranco @ xda-developers
 do.devicecheck=1
 do.initd=0
 do.modules=0
@@ -12,14 +12,17 @@ do.cleanup=1
 do.cleanuponabort=1
 device.name1=flo
 device.name2=deb
-}
+} # end properties
 
 # shell variables
 block=/dev/block/platform/msm_sdcc.1/by-name/boot;
 is_slot_device=0;
 
+
+## AnyKernel methods (DO NOT CHANGE)
 # import patching functions/variables - see for reference
 . /tmp/anykernel/tools/ak2-core.sh;
+
 
 ## AnyKernel install
 dump_boot;
@@ -35,8 +38,8 @@ insert_line fstab.flo "data           f2fs" before "data           ext4" "/dev/b
 # init.flo.rc
 insert_line init.flo.rc "init.fk" before "import init.flo.usb.rc" "import init.fk.rc";
 insert_line init.flo.rc "performance_profiles" before "import init.flo.usb.rc" "import init.performance_profiles.rc";
-replace_section init.flo.rc "service thermald" "group radio" "#service thermald /system/bin/thermald\n#    class main\n#    group radio system";
-replace_section init.flo.rc "service mpdecision" "group root system" "#service mpdecision /system/bin/mpdecision --no_sleep --avg_comp\n#    class main\n#    user root\n#    group root system";
+replace_section init.flo.rc "service thermald" " " "#service thermald /system/bin/thermald\n#    class main\n#    group radio system\n";
+replace_section init.flo.rc "service mpdecision" " " "#service mpdecision /system/bin/mpdecision --avg_comp\n#    class main\n#    user root\n#    group root readproc system\n#    disabled\n";
 
 # end ramdisk changes
 
