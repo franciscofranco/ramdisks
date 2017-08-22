@@ -13,6 +13,12 @@ on post-fs
     exec u:r:init:s0 -- /system/bin/mkswap /dev/block/zram0
     exec u:r:init:s0 -- /system/bin/swapon /dev/block/zram0
 
+    exec u:r:su:s0 root root -- /system/bin/mkswap /dev/block/zram0
+    exec u:r:su:s0 root root -- /system/bin/swapon /dev/block/zram0
+
+    exec u:r:supersu:s0 root root -- /system/bin/mkswap /dev/block/zram0
+    exec u:r:supersu:s0 root root -- /system/bin/swapon /dev/block/zram0
+
 on nonencrypted
     write /proc/sys/vm/page-cluster 0
     write /proc/sys/vm/swappiness 60
@@ -80,5 +86,8 @@ on property:sys.boot_completed=1
     write /sys/kernel/mm/ksm/deferred_timer 1
     write /sys/kernel/mm/ksm/run 0
 
-    exec u:r:init:s0 root root -- /init.supolicy.sh
+    exec u:r:su:s0 root root -- /init.supolicy.sh
     exec u:r:supersu:s0 root root -- /init.supolicy.sh
+
+    exec u:r:su:s0 root root -- /sbin/fake-mpd.sh
+    exec u:r:supersu:s0 root root -- /sbin/fake-mpd.sh
