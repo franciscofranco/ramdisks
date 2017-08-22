@@ -20,7 +20,10 @@ function get-set-forall() {
 
 # macro to write pids to system-background cpuset
 function writepid_sbg() {
-    echo -n $1 > /dev/cpuset/system-background/tasks
+    until [ ! "$1" ]; do
+        echo -n $1 > /dev/cpuset/system-background/tasks;
+        shift;
+    done;
 }
 
 ################################################################################
@@ -56,7 +59,6 @@ TIME_DAEMON=`pidof time_daemon`
 CND=`pidof cnd`
 IMSQMIDAEMON=`pidof imsqmidaemon`
 IMSDATADAEMON=`pidof imsdatadaemon`
-FINGERPRINTD=`pidof fingerprintd`
 
 writepid_sbg $LOGCAT
 writepid_sbg $RMT_STORAGE
@@ -72,4 +74,3 @@ writepid_sbg $TIME_DAEMON
 writepid_sbg $CND
 writepid_sbg $IMSQMIDAEMON
 writepid_sbg $IMSDATADAEMON
-writepid_sbg $FINGERPRINTD
