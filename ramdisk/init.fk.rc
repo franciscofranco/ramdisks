@@ -96,6 +96,12 @@ on property:sys.boot_completed=1
     write /sys/module/msm_thermal/parameters/temp_threshold 44
     write /proc/sys/vm/swappiness 100
 
+    # these minfree settings are set like this otherwise Android kills apps like Pokemon GO
+    # almost instantly after they go to the background. Even with KSM and ZRAM block of 1Gb
+    # it still happens. With these minfree settings (same parameters as the Nexus 5) the issue
+    # doesn't happen anymore
+    write /sys/module/lowmemorykiller/parameters/minfree "18432,23040,27648,32256,36864,46080"
+
     # wakeups bypass
     write /sys/module/wakeup/parameters/enable_wlan_extscan_wl_ws 0
     write /sys/module/wakeup/parameters/enable_wlan_wow_wl_ws 0
