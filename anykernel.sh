@@ -2,23 +2,22 @@
 # osm0sis @ xda-developers
 
 ## AnyKernel setup
-# EDIFY properties
+# begin properties
 properties() {
-kernel.string=franco.Kernel by franciscofranco @ xda-developers
+kernel.string=Franco Kernel by franciscofranco @ xda-developers
 do.devicecheck=1
 do.initd=0
 do.modules=0
 do.cleanup=1
 do.cleanuponabort=1
 device.name1=angler
-}
+} # end properties
 
 # shell variables
 block=/dev/block/platform/soc.0/f9824900.sdhci/by-name/boot;
 is_slot_device=0;
 
-## end setup
-
+## AnyKernel methods (DO NOT CHANGE)
 # import patching functions/variables - see for reference
 . /tmp/anykernel/tools/ak2-core.sh;
 ## AnyKernel install
@@ -26,11 +25,16 @@ dump_boot;
 
 # begin ramdisk changes
 
+# fstab.angler
+insert_line fstab.angler "data           f2fs" after "data           ext4" "/dev/block/platform/soc.0/f9824900.sdhci/by-name/userdata     /data           f2fs    rw,nosuid,nodev,noatime,nodiratime,inline_xattr wait,formattable,encryptable=/dev/block/platform/soc.0/f9824900.sdhci/by-name/metadata";
+insert_line fstab.angler "cache          f2fs" after "cache          ext4" "/dev/block/platform/soc.0/f9824900.sdhci/by-name/cache        /cache          f2fs    rw,nosuid,nodev,noatime,nodiratime,inline_xattr wait,check,formattable";
+patch_fstab fstab.bullhead none swap flags "zramsize=533413200,notrim" "zramsize=1066826400,notrim";
+
 # init.angler.rc
 insert_line init.angler.rc "init.fk.rc" after "import init.angler.sensorhub.rc" "import init.fk.rc";
 insert_line init.angler.rc "performance_profiles" after "import init.angler.sensorhub.rc" "import init.performance_profiles.rc";
-replace_string init.angler.rc "#    verity_load_state" "    verity_load_state" "#    verity_load_state"
-replace_string init.angler.rc "#    verity_update_state" "    verity_update_state" "#    verity_update_state"
+replace_string init.angler.rc "#    verity_load_state" "    verity_load_state" "#    verity_load_state";
+replace_string init.angler.rc "#    verity_update_state" "    verity_update_state" "#    verity_update_state";
 replace_section init.angler.rc "service atfwd" " " "service atfwd /system/bin/ATFWD-daemon\n    disabled\n    class late_start\n    user system\n    group system radio\n";
 
 # end ramdisk changes
