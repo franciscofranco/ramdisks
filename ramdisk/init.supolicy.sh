@@ -1,6 +1,6 @@
 #!/system/bin/sh
 
-SULIBS="/su/lib:/system/lib64:/system/lib"
+SULIBS="/su/lib:/sbin/supersu/lib:/system/lib64:/system/lib"
 
 for SUPOLICY in `which supolicy sepolicy-inject`;
 do
@@ -28,5 +28,6 @@ do
 	"allow priv_app sysfs_mac_address file open" \
 	"allow shell shell capability dac_override" \
 	"allow untrusted_app sysfs_led dir search" \
-	"allow untrusted_app sysfs_led file { read getattr open }"
+	"allow untrusted_app sysfs_led file { read getattr open }" \
+	"allow untrusted_app proc file { read open getattr }"
 done
