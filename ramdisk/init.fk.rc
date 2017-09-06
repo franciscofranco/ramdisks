@@ -72,6 +72,9 @@ on property:sys.boot_completed=1
     write /sys/kernel/mm/ksm/deferred_timer 1
     write /sys/kernel/mm/ksm/run 0
 
+    # misc
+    write /proc/sys/vm/swappiness 100
+
     # bcmdhd wakeup sources
     write /sys/module/wakeup/parameters/enable_wlan_rx_wake_ws 0
     write /sys/module/wakeup/parameters/enable_wlan_ctrl_wake_ws 0
