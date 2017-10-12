@@ -63,6 +63,7 @@ on late-fs
     write /sys/module/wakeup/parameters/enable_wlan_wow_wl_ws 0
     write /sys/module/wakeup/parameters/enable_wlan_ipa_ws 0
     write /sys/module/wakeup/parameters/enable_wlan_pno_wl_ws 0
+    write /sys/module/wakeup/parameters/enable_wcnss_filter_lock_ws 0
 
     exec u:r:su:s0 root root -- /init.supolicy.sh
     exec u:r:supersu:s0 root root -- /init.supolicy.sh
