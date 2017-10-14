@@ -6,7 +6,6 @@
 properties() {
 kernel.string=Franco Kernel by franciscofranco @ xda-developers
 do.devicecheck=1
-do.initd=0
 do.modules=0
 do.cleanup=1
 do.cleanuponabort=1
@@ -23,6 +22,12 @@ is_slot_device=0;
 . /tmp/anykernel/tools/ak2-core.sh;
 
 
+## AnyKernel file attributes
+# set permissions/ownership for included ramdisk files
+chmod -R 750 $ramdisk/*;
+chown -R root:root $ramdisk/*;
+
+
 ## AnyKernel install
 dump_boot;
 
@@ -31,7 +36,7 @@ dump_boot;
 # fstab.bullhead
 insert_line fstab.bullhead "data           f2fs" after "data           ext4" "/dev/block/platform/soc.0/f9824900.sdhci/by-name/userdata     /data           f2fs    rw,nosuid,nodev,noatime,nodiratime,inline_xattr wait,formattable,encryptable=/dev/block/platform/soc.0/f9824900.sdhci/by-name/metadata";
 insert_line fstab.bullhead "cache          f2fs" after "cache          ext4" "/dev/block/platform/soc.0/f9824900.sdhci/by-name/cache        /cache          f2fs    rw,nosuid,nodev,noatime,nodiratime,inline_xattr wait,check,formattable";
-patch_fstab fstab.bullhead none swap flags "zramsize=533413200,notrim" "zramsize=1066826400,notrim";
+patch_fstab fstab.bullhead none swap flags "zramsize=533413200" "zramsize=1066826400";
 
 # init.bullhead.rc
 insert_line init.bullhead.rc "init.fk.rc" after "import init.bullhead.ramdump.rc" "import init.fk.rc";
