@@ -1,6 +1,6 @@
 #!/system/bin/sh
 
-SULIBS="/su/lib:/system/lib64:/system/lib"
+SULIBS="/su/lib:/sbin/supersu/lib:/system/lib64:/system/lib"
 
 for SUPOLICY in `which supolicy sepolicy-inject`;
 do
