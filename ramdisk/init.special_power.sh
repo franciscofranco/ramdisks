@@ -20,18 +20,12 @@ function get-set-forall() {
 
 # macro to write pids to system-background cpuset
 function writepid_sbg() {
-    if [ ! -z "$1" ]
-        then
-            echo -n $1 > /dev/cpuset/system-background/tasks
-    fi
+    until [ ! "$1" ]; do
+        echo -n $1 > /dev/cpuset/system-background/tasks;
+        shift;
+    done;
 }
 
-function writepid_fg_boost() {
-    if [ ! -z "$1" ]
-        then
-            echo -n $1 > /dev/cpuset/foreground/boost/tasks
-    fi
-}
 ################################################################################
 
 # devfreq
