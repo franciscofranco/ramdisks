@@ -16,5 +16,7 @@ do
         "allow dumpstate theme_data_file file getattr" \
         "allow mediaserver mediaserver_tmpfs file { read write execute }" \
         "allow shell dalvikcache_data_file dir write" \
-	"allow perfd system_server file write"
+	"allow perfd system_server file write" \
+	"allow untrusted_app sysfs_leds dir search" \
+	"allow untrusted_app sysfs_leds lnk_file read"
 done
