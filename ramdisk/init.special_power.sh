@@ -13,21 +13,40 @@ function copy() {
 
 # macro to write pids to system-background cpuset
 function writepid_sbg() {
-    if [ ! -z "$1" ]
-        then
-            echo -n $1 > /dev/cpuset/system-background/tasks
-    fi
+    until [ ! "$1" ]; do
+        echo -n $1 > /dev/cpuset/system-background/tasks;
+        shift;
+    done;
 }
 
 function writepid_top_app() {
-    if [ ! -z "$1" ]
-        then
-            echo -n $1 > /dev/cpuset/top-app/tasks
-    fi
+    until [ ! "$1" ]; do
+        echo -n $1 > /dev/cpuset/top-app/tasks;
+        shift;
+    done;
 }
 ################################################################################
 
-sleep 10
+sleep 5
+
+# display kcal calibration
+chmod 0664 /sys/devices/platform/kcal_ctrl.0/kcal
+chmod 0664 /sys/devices/platform/kcal_ctrl.0/kcal_cont
+chmod 0664 /sys/devices/platform/kcal_ctrl.0/kcal_hue
+chmod 0664 /sys/devices/platform/kcal_ctrl.0/kcal_sat
+chmod 0664 /sys/devices/platform/kcal_ctrl.0/kcal_val
+
+# cpu
+chmod 0664 /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+chmod 0664 /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
+chmod 0664 /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+chmod 0664 /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq
+chmod 0664 /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq
+chmod 0664 /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor
+
+# gpu
+chmod 0664 /sys/class/kgsl/kgsl-3d0/devfreq/max_freq
+chmod 0664 /sys/class/kgsl/kgsl-3d0/devfreq/min_freq
 
 write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 307200
 write /sys/devices/system/cpu/cpu2/cpufreq/scaling_min_freq 307200

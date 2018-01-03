@@ -18,6 +18,7 @@ device.name3=OnePlus3
 # shell variables
 block=/dev/block/platform/soc/624000.ufshc/by-name/boot;
 is_slot_device=0;
+ramdisk_compression=auto;
 
 ## end setup
 
@@ -29,12 +30,10 @@ dump_boot;
 
 # begin ramdisk changes
 
-# init.qcom.rc
-insert_line init.qcom.rc "init.fk.rc" after "import init.qcom.usb.rc" "import init.fk.rc";
-insert_line init.qcom.rc "performance_profiles" after "import init.qcom.usb.rc" "import init.performance_profiles.rc";
+# init.rc
+insert_line init.rc "init.fk.rc" after "import /init.usb.rc" "import init.fk.rc";
+insert_line init.rc "performance_profiles" after "import /init.usb.rc" "import init.performance_profiles.rc";
 insert_line default.prop "ro.sys.fw.bg_apps_limit=60" before "ro.oxygen.version" "ro.sys.fw.bg_apps_limit=60";
-insert_line default.prop "ro.sys.sdcardfs=false" before "ro.oxygen.version" "ro.sys.sdcardfs=false";
-# replace_section init.qcom.rc "service atfwd" "group system radio" "service atfwd /system/bin/ATFWD-daemon\n    disabled\n    class late_start\n    user system\n    group system radio";
 
 # end ramdisk changes
 
