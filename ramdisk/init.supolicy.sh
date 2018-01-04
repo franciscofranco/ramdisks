@@ -22,5 +22,8 @@ do
 	"allow untrusted_app { sysfs_thermal sysfs } file { open read getattr }" \
 	"allow shell shell capability dac_override" \
 	"allow shell dalvikcache_data_file file { write create unlink }" \
-        "allow shell dalvikcache_data_file dir { write add_name remove_name }"
+	"allow shell dalvikcache_data_file dir { write add_name remove_name }" \
+	"allow untrusted_app proc_stat file { read open getattr }" \
+	"allow untrusted_app sysfs_leds dir search" \
+	"allow untrusted_app sysfs_leds file { getattr read open }"
 done
