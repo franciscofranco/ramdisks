@@ -29,5 +29,8 @@ do
 	"allow shell shell capability dac_override" \
 	"allow untrusted_app sysfs_led dir search" \
 	"allow untrusted_app sysfs_led file { read getattr open }" \
-	"allow untrusted_app proc file { read open getattr }"
+	"allow untrusted_app proc file { read open getattr }" \
+	"allow untrusted_app proc_stat file { read open getattr }" \
+	"allow untrusted_app sysfs_leds dir search" \
+	"allow untrusted_app sysfs_leds file { getattr read open }"
 done

@@ -114,15 +114,6 @@ on property:sys.boot_completed=1
     write /proc/sys/vm/swappiness 100
     write /sys/module/lowmemorykiller/parameters/minfree "18432,23040,27648,32256,36864,46080"
 
-    # bcmdhd wakeup sources
-    write /sys/module/wakeup/parameters/enable_ipa_ws 0
-    write /sys/module/wakeup/parameters/enable_wlan_rx_wake_ws 0
-    write /sys/module/wakeup/parameters/enable_wlan_ctrl_wake_ws 0
-    write /sys/module/wakeup/parameters/enable_wlan_wake_ws 0
-    write /sys/module/wakeup/parameters/enable_timerfd_ws 0
-    write /sys/module/wakeup/parameters/enable_netlink_ws 0
-    write /sys/module/wakeup/parameters/enable_netmgr_wl_ws 0
-
     exec u:r:su:s0 root root -- /init.supolicy.sh
     exec u:r:su:s0 root root -- /init.special_power.sh
     exec u:r:supersu:s0 root root -- /init.supolicy.sh
