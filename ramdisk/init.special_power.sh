@@ -17,7 +17,7 @@ function writepid_sbg() {
 }
 ################################################################################
 
-sleep 30
+sleep 5
 
 MDM_HELPER=`pidof mdm_helper`
 BRIDGEMGRD=`pidof bridgemgrd`
