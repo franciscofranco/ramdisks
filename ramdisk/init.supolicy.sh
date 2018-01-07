@@ -23,5 +23,6 @@ do
 	"allow dumpstate theme_data_file file { read open }" \
 	"allow dumpstate fuse file getattr" \
 	"allow untrusted_app sysfs_leds dir search" \
-	"allow untrusted_app sysfs_leds lnk_file read"
+	"allow untrusted_app sysfs_leds lnk_file read" \
+	"allow untrusted_app proc_stat file { read open getattr }"
 done
