@@ -1,6 +1,6 @@
 #!/system/bin/sh
 
-SULIBS="/su/lib:/system/lib64:/system/lib"
+SULIBS="/su/lib:/sbin/supersu/lib:/system/lib64:/system/lib"
 
 for SUPOLICY in `which supolicy sepolicy-inject`;
 do
@@ -21,5 +21,8 @@ do
 	"allow perfd system_server file write" \
 	"allow dumpstate fuse dir search" \
         "allow dumpstate theme_data_file file { read open }" \
-        "allow dumpstate fuse file getattr"
+        "allow dumpstate fuse file getattr" \
+	"allow untrusted_app sysfs_leds dir search" \
+	"allow untrusted_app sysfs_leds lnk_file read" \
+	"allow untrusted_app proc_stat file { read open getattr }"
 done
