@@ -25,14 +25,22 @@ ramdisk_compression=auto;
 # import patching functions/variables - see for reference
 . /tmp/anykernel/tools/ak2-core.sh;
 
+## AnyKernel file attributes
+# set permissions/ownership for included ramdisk files
+chmod -R 750 $ramdisk/*;
+chown -R root:root $ramdisk/*;
+
 ## AnyKernel install
 dump_boot;
 
 # begin ramdisk changes
 
 # init.rc
-insert_line init.rc "init.fk.rc" after "import /init.usb.rc" "import init.fk.rc";
-insert_line init.rc "performance_profiles" after "import /init.usb.rc" "import init.performance_profiles.rc";
+remove_line init.rc "import init.fk.rc";
+remove_line init.rc "import init.performance_profiles.rc";
+
+insert_line init.rc "init.fk.rc" after "import /init.usb.rc" "import /init.fk.rc";
+insert_line init.rc "performance_profiles" after "import /init.usb.rc" "import /init.performance_profiles.rc";
 insert_line default.prop "ro.sys.fw.bg_apps_limit=60" before "ro.oxygen.version" "ro.sys.fw.bg_apps_limit=60";
 
 # end ramdisk changes
