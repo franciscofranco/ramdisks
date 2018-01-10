@@ -14,7 +14,7 @@ do
 	"allow vold logd dir read" \
 	"allow vold logd lnk_file getattr" \
 	"allow dumpstate theme_data_file file getattr" \
-	"allow mediaserver mediaserver_tmpfs file { read write execute }"
+	"allow mediaserver mediaserver_tmpfs file { read write execute }" \
 	"allow untrusted_app sysfs_zram dir search" \
         "allow untrusted_app sysfs_zram file { read open getattr }" \
 	"allow shell dalvikcache_data_file dir write" \
@@ -24,5 +24,11 @@ do
         "allow dumpstate fuse file getattr" \
 	"allow untrusted_app sysfs_leds dir search" \
 	"allow untrusted_app sysfs_leds lnk_file read" \
-	"allow untrusted_app proc_stat file { read open getattr }"
+	"allow untrusted_app proc_stat file { read open getattr }" \
+	"allow hal_memtrack_default qti_debugfs file { read open getattr }" \
+	"allow hal_perf_default kernel dir search" \
+	"allow untrusted_app proc file { read open getattr }" \
+	"allow hal_perf_default hal_perf_default capability kill" \
+	"allow hal_perf_default kernel dir { read open }" \
+	"allow hal_perf_default hal_graphics_composer_default process signull"
 done
