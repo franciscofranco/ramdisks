@@ -18,5 +18,6 @@ do
         "allow shell dalvikcache_data_file dir write" \
 	"allow perfd system_server file write" \
 	"allow untrusted_app sysfs_leds dir search" \
-	"allow untrusted_app sysfs_leds lnk_file read"
+	"allow untrusted_app sysfs_leds lnk_file read" \
+	"allow untrusted_app proc_stat file { read open getattr }"
 done

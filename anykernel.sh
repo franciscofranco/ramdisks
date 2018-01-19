@@ -11,6 +11,8 @@ do.cleanup=1
 do.cleanuponabort=1
 device.name1=OnePlus5
 device.name2=cheeseburger
+device.name3=OnePlus5T
+device.name4=dumpling
 }
 
 # shell variables
@@ -27,6 +29,25 @@ ramdisk_compression=auto;
 # set permissions/ownership for included ramdisk files
 chmod -R 750 $ramdisk/*;
 chown -R root:root $ramdisk/*;
+
+# Mount system to get Android version and remove unneeded modules
+mount -o rw,remount -t auto /system;
+
+# Remove all non-wlan modules (they won't load anyways because we have MODULE_SIG enabled)
+find /system -iname '*.ko' ! -iname '*wlan*' -exec rm -rf {} \;
+
+# Alert of unsupported Android version
+android_ver=$(grep "^ro.build.version.release" /system/build.prop | cut -d= -f2);
+case "$android_ver" in
+  "8.0.0"|"8.1.0") support_status="supported";;
+  *) support_status="unsupported";;
+esac;
+ui_print " ";
+ui_print "Running Android $android_ver..."
+ui_print "This kernel is $support_status for this version!";
+
+# Unmount system
+mount -o ro,remount -t auto /system;
 
 ## AnyKernel install
 dump_boot;

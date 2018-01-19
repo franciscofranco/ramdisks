@@ -27,7 +27,9 @@ function writepid_top_app() {
 }
 ################################################################################
 
-sleep 5
+{
+
+sleep 10
 
 # display kcal calibration
 chmod 0664 /sys/devices/platform/kcal_ctrl.0/kcal
@@ -122,3 +124,5 @@ writepid_sbg $SEEMP_HEALTHD
 writepid_sbg $ESEPMDAEMON
 writepid_sbg $WPA_SUPPLICANT
 writepid_sbg $SEEMPD
+
+}&
