@@ -29,6 +29,16 @@ ramdisk_compression=auto;
 chmod -R 750 $ramdisk/*;
 chown -R root:root $ramdisk/*;
 
+# Alert of unsupported Android version
+android_ver=$(grep "^ro.build.version.release" /system/build.prop | cut -d= -f2);
+case "$android_ver" in
+  "8.0.0") support_status="supported";;
+  *) support_status="unsupported";;
+esac;
+ui_print " ";
+ui_print "Running Android $android_ver..."
+ui_print "This kernel is $support_status for this version!";
+
 ## AnyKernel install
 dump_boot;
 
