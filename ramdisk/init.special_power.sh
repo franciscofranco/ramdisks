@@ -28,6 +28,10 @@ function writepid_sbg() {
 
 ################################################################################
 
+{
+
+sleep 10
+
 # devfreq
 get-set-forall /sys/class/devfreq/qcom,cpubw*/governor bw_hwmon
 restorecon -R /sys/class/devfreq/qcom,cpubw*
@@ -43,9 +47,44 @@ get-set-forall /sys/class/devfreq/qcom,cpubw*/bw_hwmon/up_scale 250
 get-set-forall /sys/class/devfreq/qcom,cpubw*/bw_hwmon/idle_mbps 1600
 get-set-forall /sys/class/devfreq/qcom,mincpubw*/governor cpufreq
 
-sleep 10
+write /sys/devices/system/cpu/cpu0/cpufreq/interactive/use_sched_load 0
+write /sys/devices/system/cpu/cpu0/cpufreq/interactive/above_hispeed_delay 0
+write /sys/devices/system/cpu/cpu0/cpufreq/interactive/go_hispeed_load 100
+write /sys/devices/system/cpu/cpu0/cpufreq/interactive/hispeed_freq 0
+write /sys/devices/system/cpu/cpu0/cpufreq/interactive/target_loads "70 1017600:50 1190400:65 1305600:80 1382400:90 1401600:95"
+write /sys/devices/system/cpu/cpu0/cpufreq/interactive/timer_rate 20000
+write /sys/devices/system/cpu/cpu0/cpufreq/interactive/min_sample_time 40000
+write /sys/devices/system/cpu/cpu0/cpufreq/interactive/ignore_hispeed_on_notif 1
+write /sys/devices/system/cpu/cpu0/cpufreq/interactive/max_freq_hysteresis 80000
+write /sys/devices/system/cpu/cpu0/cpufreq/interactive/timer_slack 30000
+write /sys/devices/system/cpu/cpu0/cpufreq/interactive/io_is_busy 1
 
-FINGERPRINTD=`pidof fingerprintd`
+write /sys/devices/system/cpu/cpu4/cpufreq/interactive/use_sched_load 0
+write /sys/devices/system/cpu/cpu4/cpufreq/interactive/above_hispeed_delay "20000 1113600:40000 1612800:20000"
+write /sys/devices/system/cpu/cpu4/cpufreq/interactive/go_hispeed_load 85
+write /sys/devices/system/cpu/cpu4/cpufreq/interactive/hispeed_freq 1113600
+write /sys/devices/system/cpu/cpu4/cpufreq/interactive/target_loads "90 1382400:95"
+write /sys/devices/system/cpu/cpu4/cpufreq/interactive/timer_rate 30000
+write /sys/devices/system/cpu/cpu4/cpufreq/interactive/min_sample_time 30000
+write /sys/devices/system/cpu/cpu4/cpufreq/interactive/ignore_hispeed_on_notif 1
+write /sys/devices/system/cpu/cpu4/cpufreq/interactive/max_freq_hysteresis 80000
+write /sys/devices/system/cpu/cpu4/cpufreq/interactive/timer_slack 30000
+write /sys/devices/system/cpu/cpu4/cpufreq/interactive/io_is_busy 1
+
+write /sys/module/cpu_boost/parameters/input_boost_freq "0:1017600 4:998400"
+write /sys/module/cpu_boost/parameters/input_boost_ms 1500
+
+write /proc/sys/kernel/sched_boost 0
+write /proc/sys/kernel/sched_migration_fixup 1
+write /proc/sys/kernel/sched_upmigrate 95
+write /proc/sys/kernel/sched_downmigrate 90
+write /proc/sys/kernel/sched_freq_inc_notify 400000
+write /proc/sys/kernel/sched_freq_dec_notify 400000
+write /proc/sys/kernel/sched_spill_nr_run 3
+write /proc/sys/kernel/sched_init_task_load 100
+
+sleep 20
+
 QSEECOMD=`pidof qseecomd`
 THERMAL-ENGINE=`pidof thermal-engine`
 TIME_DAEMON=`pidof time_daemon`
@@ -64,7 +103,6 @@ IFAADAEMON=`pidof ifaadaemon`
 LOGCAT=`pidof logcat`
 HVDCP=`pidof hvdcp_opti`
 
-writepid_fg_boost $FINGERPRINTD
 writepid_sbg $QSEECOMD
 writepid_sbg $THERMAL-ENGINE
 writepid_sbg $TIME_DAEMON
@@ -82,3 +120,5 @@ writepid_sbg $QSEEPROXYDAEMON
 writepid_sbg $IFAADAEMON
 writepid_sbg $LOGCAT
 writepid_sbg $HVDCP
+
+}&

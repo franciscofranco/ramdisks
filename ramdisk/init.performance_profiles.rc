@@ -18,8 +18,8 @@ on property:fku.perf.profile=1
     write /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq 1804800
     write /sys/class/kgsl/kgsl-3d0/devfreq/governor msm-adreno-tz
     write /sys/class/devfreq/cpubw/governor bw_hwmon
-    write /sys/module/cpu_boost/parameters/input_boost_freq "0:1190400 4:998400"
-    write /sys/module/cpu_boost/parameters/input_boost_ms 150
+    write /sys/module/cpu_boost/parameters/input_boost_freq "0:1017600 4:998400"
+    write /sys/module/cpu_boost/parameters/input_boost_ms 1500
     write /sys/class/leds/lcd-backlight/max_brightness 255
 
 # Performance
@@ -31,5 +31,5 @@ on property:fku.perf.profile=2
     write /sys/class/kgsl/kgsl-3d0/devfreq/governor performance
     write /sys/class/devfreq/cpubw/governorbw_hwmon performance
     write /sys/module/cpu_boost/parameters/input_boost_freq "0:1401600 4:1804800"
-    write /sys/module/cpu_boost/parameters/input_boost_ms 1500
+    write /sys/module/cpu_boost/parameters/input_boost_ms 2000
     write /sys/class/leds/lcd-backlight/max_brightness 255

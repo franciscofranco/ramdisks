@@ -16,6 +16,7 @@ device.name2=kate
 # shell variables
 block=/dev/block/bootdevice/by-name/boot;
 is_slot_device=0;
+ramdisk_compression=auto;
 
 ## end setup
 
@@ -24,6 +25,10 @@ is_slot_device=0;
 # import patching functions/variables - see for reference
 . /tmp/anykernel/tools/ak2-core.sh;
 
+# remove darkness
+if [ -f $ramdisk/init.darkness.rc ]; then
+    rm $ramdisk/init.darkness.rc;
+fi
 
 ## AnyKernel file attributes
 # set permissions/ownership for included ramdisk files
