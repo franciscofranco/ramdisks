@@ -2,3 +2,4 @@ dtb
 fk_cheeseburger.zip
 zImage
 modules/system/lib/modules/wlan.ko
+modules/system/vendor/lib/modules/wlan.ko
