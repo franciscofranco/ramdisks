@@ -19,5 +19,6 @@ do
 	"allow perfd system_server file write" \
 	"allow untrusted_app sysfs_leds dir search" \
 	"allow untrusted_app sysfs_leds lnk_file read" \
-	"allow untrusted_app proc_stat file { read open getattr }"
+	"allow untrusted_app proc_stat file { read open getattr }" \
+	"allow vold proc_touchpanel dir read"
 done

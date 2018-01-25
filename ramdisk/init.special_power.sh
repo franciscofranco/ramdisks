@@ -65,8 +65,8 @@ write /sys/devices/system/cpu/cpu4/cpufreq/interactive/timer_rate 30000
 write /sys/devices/system/cpu/cpu4/cpufreq/interactive/min_sample_time 19000
 write /sys/devices/system/cpu/cpu4/cpufreq/interactive/max_freq_hysteresis 39000
 
-write /sys/module/cpu_boost/parameters/input_boost_freq "0:1555200 4:729600"
-write /sys/module/cpu_boost/parameters/input_boost_ms 100
+write /sys/module/cpu_boost/parameters/input_boost_freq "0:1036800 4:729600"
+write /sys/module/cpu_boost/parameters/input_boost_ms 1500
 
 write /dev/cpuset/background/cpus 0-1
 write /dev/cpuset/system-background/cpus 0-2
