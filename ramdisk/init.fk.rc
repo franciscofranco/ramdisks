@@ -81,8 +81,8 @@ on property:sys.boot_completed=1
     write /sys/devices/system/cpu/cpu4/cpufreq/interactive/timer_slack 30000
 
     # cpu-boost
-    write /sys/module/cpu_boost/parameters/input_boost_freq "0:1248000 4:768000"
-    write /sys/module/cpu_boost/parameters/input_boost_ms 150
+    write /sys/module/cpu_boost/parameters/input_boost_freq "0:960000 4:768000"
+    write /sys/module/cpu_boost/parameters/input_boost_ms 1500
 
     # re-enable retention idle state
     # fix-up is merged in the Kernel
