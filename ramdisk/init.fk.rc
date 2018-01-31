@@ -19,6 +19,12 @@ on boot
     write /dev/cpuset/background/cpus 0-7
     write /dev/cpuset/system-background/cpus 0-7
 
+    # bind mount custom wifi module
+    rmmod wlan.ko
+    mount auto /modules/wlan.ko /system/lib/modules/wlan.ko bind
+    mount auto /modules/wlan.ko /vendor/lib/modules/wlan.ko bind
+    exec u:r:modprobe:s0 -- /vendor/bin/modprobe -a -d /vendor/lib/modules wlan
+
 on property:sys.boot_completed=1
     # allows FKUpdater to know this feature is supported
     setprop fku.profiles 1
@@ -57,5 +63,6 @@ on property:sys.boot_completed=1
     exec u:r:su:s0 root root -- /init.supolicy.sh
     exec u:r:supersu:s0 root root -- /init.supolicy.sh
 
+    exec u:r:init:s0 -- /init.special_power.sh
     exec u:r:su:s0 root root -- /init.special_power.sh
     exec u:r:supersu:s0 root root -- /init.special_power.sh
