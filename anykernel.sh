@@ -57,12 +57,14 @@ $bin/sepolicy-inject -s modprobe -t rootfs -c system -p module_load -P sepolicy;
 $bin/sepolicy-inject -s init -t vendor_file -c file -p mounton -P sepolicy;
 $bin/sepolicy-inject -s init -t system_file -c file -p mounton -P sepolicy;
 $bin/sepolicy-inject -s init -t rootfs -c file -p execute_no_trans -P sepolicy;
+$bin/sepolicy-inject -s init -t rootfs -c system -p module_load -P sepolicy;
 
 # sepolicy_debug
 $bin/sepolicy-inject -s modprobe -t rootfs -c system -p module_load -P sepolicy;
 $bin/sepolicy-inject -s init -t vendor_file -c file -p mounton -P sepolicy_debug;
 $bin/sepolicy-inject -s init -t system_file -c file -p mounton -P sepolicy_debug;
 $bin/sepolicy-inject -s init -t rootfs -c file -p execute_no_trans -P sepolicy_debug;
+$bin/sepolicy-inject -s modprobe -t rootfs -c system -p module_load -P sepolicy_debug;
 
 # end ramdisk changes
 
