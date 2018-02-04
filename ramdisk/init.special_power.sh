@@ -27,7 +27,7 @@ function writepid_top_app() {
 }
 ################################################################################
 
-}
+{
 
 sleep 10
 
@@ -73,8 +73,8 @@ write /sys/devices/system/cpu/cpu2/cpufreq/interactive/ignore_hispeed_on_notif 0
 write /sys/devices/system/cpu/cpu2/cpufreq/interactive/min_sample_time 19000
 write /sys/devices/system/cpu/cpu2/cpufreq/interactive/max_freq_hysteresis 39000
 
-write /sys/module/cpu_boost/parameters/input_boost_freq "0:1209600 2:825600"
-write /sys/module/cpu_boost/parameters/input_boost_duration 150
+write /sys/module/cpu_boost/parameters/input_boost_freq "0:979200 2:825600"
+write /sys/module/cpu_boost/parameters/input_boost_ms 1500
 
 # Setting b.L scheduler parameters
 write /proc/sys/kernel/sched_downmigrate 90
