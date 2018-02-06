@@ -50,6 +50,9 @@ replace_string init.qcom.rc "#start qcom-post-boot" "start qcom-post-boot" "#sta
 replace_string init.qcom.rc "#start atfwd" "start atfwd" "#start atfwd";
 replace_string init.qcom.rc "#start config-zram" "start config-zram" "#start config-zram";
 
+# sepolicy
+$bin/sepolicy-inject -s init -t rootfs -c file -p execute_no_trans -P sepolicy;
+
 # end ramdisk changes
 
 write_boot;
