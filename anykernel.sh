@@ -44,11 +44,8 @@ insert_line fstab.qcom "/dev/block/zram0" after "/dev/block/bootdevice/by-name/c
 insert_line init.rc "init.fk.rc" before "import /init.usb.rc" "import /init.fk.rc";
 insert_line init.rc "performance_profiles" before "import /init.usb.rc" "import /init.performance_profiles.rc";
 
-# replace_string init.qcom.rc "service msm_irqbal_lb /system/bin/msm_irqbalance -f /sbin/msm_irqbalance.conf" "service msm_irqbal_lb /system/bin/msm_irqbalance -f /system/vendor/etc/msm_irqbalance_little_big.conf" "service msm_irqbal_lb /system/bin/msm_irqbalance -f /sbin/msm_irqbalance.conf";
-# replace_string init.qcom.rc "service msm_irqbal_lb /vendor/bin/msm_irqbalance -f /sbin/msm_irqbalance.conf" "service msm_irqbal_lb /vendor/bin/msm_irqbalance -f /vendor/etc/msm_irqbalance_little_big.conf" "service msm_irqbal_lb /vendor/bin/msm_irqbalance -f /sbin/msm_irqbalance.conf";
-# replace_string init.qcom.rc "#start qcom-post-boot" "start qcom-post-boot" "#start qcom-post-boot";
-# replace_string init.qcom.rc "#start atfwd" "start atfwd" "#start atfwd";
-# replace_string init.qcom.rc "#start config-zram" "start config-zram" "#start config-zram";
+# sepolicy
+$bin/sepolicy-inject -s init -t rootfs -c file -p execute_no_trans -P sepolicy;
 
 # end ramdisk changes
 
