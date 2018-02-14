@@ -19,6 +19,8 @@ on boot
     write /dev/cpuset/background/cpus 0-7
     write /dev/cpuset/system-background/cpus 0-7
 
+    # bind mount wifi config file
+    mount auto /WCNSS_qcom_cfg.ini /vendor/etc/wifi/WCNSS_qcom_cfg.ini bind
     # bind mount custom wifi module
     rmmod wlan.ko
     mount auto /modules/wlan.ko /system/lib/modules/wlan.ko bind

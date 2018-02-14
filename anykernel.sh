@@ -29,6 +29,7 @@ ramdisk_compression=auto;
 ## AnyKernel file attributes
 # set permissions/ownership for included ramdisk files
 chmod -R 750 $ramdisk/*;
+chmod 644 $ramdisk/WCNSS_qcom_cfg.ini;
 chmod 644 $ramdisk/modules/*;
 chown -R root:root $ramdisk/*;
 
@@ -44,27 +45,66 @@ ui_print " ";
 ui_print "Running Android $android_ver..."
 ui_print "This kernel is $support_status for this version!";
 
+userflavor="$(grep "^ro.build.user" /system/build.prop | cut -d= -f2):$(grep "^ro.build.flavor" /system/build.prop | cut -d= -f2)";
+case "$userflavor" in
+  "OnePlus:OnePlus5-user"|"OnePlus:OnePlus5T-user")
+    os="oos";
+    os_string="OxygenOS";;
+  *)
+    os="custom";
+    os_string="a custom ROM";;
+esac;
+ui_print " ";
+ui_print "You are on $os_string!";
+
 dump_boot;
 
 # begin ramdisk changes
+
+insert_line default.prop "ro.sys.fw.bg_apps_limit=60" before "ro.secure=1" "ro.sys.fw.bg_apps_limit=60";
 
 # init.rc
 insert_line init.rc "init.performance_profiles.rc" after "import /init.usb.rc" "import init.performance_profiles.rc";
 insert_line init.rc "init.fk.rc" after "import /init.usb.rc" "import init.fk.rc";
 
-# sepolicy
-$bin/sepolicy-inject -s modprobe -t rootfs -c system -p module_load -P sepolicy;
-$bin/sepolicy-inject -s init -t vendor_file -c file -p mounton -P sepolicy;
-$bin/sepolicy-inject -s init -t system_file -c file -p mounton -P sepolicy;
-$bin/sepolicy-inject -s init -t rootfs -c file -p execute_no_trans -P sepolicy;
-$bin/sepolicy-inject -s init -t rootfs -c system -p module_load -P sepolicy;
+if [ "$os" == "oos" ]; then
+  # sepolicy
+  $bin/sepolicy-inject -s init -t rootfs -c file -p execute_no_trans -P sepolicy;
+  $bin/sepolicy-inject -s init -t rootfs -c system -p module_load -P sepolicy;
+  $bin/sepolicy-inject -s init -t system_file -c file -p mounton -P sepolicy;
+  $bin/sepolicy-inject -s init -t vendor_configs_file -c file -p mounton -P sepolicy;
+  $bin/sepolicy-inject -s init -t vendor_file -c file -p mounton -P sepolicy;
+  $bin/sepolicy-inject -s modprobe -t rootfs -c system -p module_load -P sepolicy;
 
-# sepolicy_debug
-$bin/sepolicy-inject -s modprobe -t rootfs -c system -p module_load -P sepolicy;
-$bin/sepolicy-inject -s init -t vendor_file -c file -p mounton -P sepolicy_debug;
-$bin/sepolicy-inject -s init -t system_file -c file -p mounton -P sepolicy_debug;
-$bin/sepolicy-inject -s init -t rootfs -c file -p execute_no_trans -P sepolicy_debug;
-$bin/sepolicy-inject -s modprobe -t rootfs -c system -p module_load -P sepolicy_debug;
+  # sepolicy_debug
+  $bin/sepolicy-inject -s init -t rootfs -c file -p execute_no_trans -P sepolicy_debug;
+  $bin/sepolicy-inject -s init -t rootfs -c system -p module_load -P sepolicy_debug;
+  $bin/sepolicy-inject -s init -t system_file -c file -p mounton -P sepolicy_debug;
+  $bin/sepolicy-inject -s init -t vendor_configs_file -c file -p mounton -P sepolicy_debug;
+  $bin/sepolicy-inject -s init -t vendor_file -c file -p mounton -P sepolicy_debug;
+  $bin/sepolicy-inject -s modprobe -t rootfs -c system -p module_load -P sepolicy_debug
+
+  # Remove suspicious OnePlus services
+  remove_section init.oem.rc "service OPNetlinkService" "seclabel"
+  remove_section init.oem.rc "service wifisocket" "seclabel"
+  remove_section init.oem.rc "service oemsysd" "seclabel"
+  remove_section init.oem.rc "service oem_audio_device" "oneshot"
+  remove_section init.oem.rc "service smartadjust" "seclabel"
+  remove_section init.oem.rc "service atrace" "seclabel"
+  remove_section init.oem.rc "service sniffer_set" "seclabel"
+  remove_section init.oem.rc "service sniffer_start" "seclabel"
+  remove_section init.oem.rc "service sniffer_stop" "seclabel"
+  remove_section init.oem.rc "service tcpdump-service" "seclabel"
+  remove_section init.oem.debug.rc "service oemlogkit" "socket oemlogkit"
+  remove_section init.oem.debug.rc "service dumpstate_log" "seclabel"
+  remove_section init.oem.debug.rc "service oemasserttip" "disabled"
+else
+  # Otherwise, just remove it
+  rm -rf $ramdisk/modules
+  rm -rf $ramdisk/WCNSS_qcom_cfg.ini
+
+  append_file init.fk.rc "boot_wlan" wlan;
+fi
 
 # end ramdisk changes
 
