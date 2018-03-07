@@ -67,29 +67,28 @@ insert_line default.prop "ro.sys.fw.bg_apps_limit=60" before "ro.secure=1" "ro.s
 insert_line init.rc "init.performance_profiles.rc" after "import /init.usb.rc" "import init.performance_profiles.rc";
 insert_line init.rc "init.fk.rc" after "import /init.usb.rc" "import init.fk.rc";
 
+# sepolicy
+$bin/sepolicy-inject -s init -t rootfs -c file -p execute_no_trans -P sepolicy;
+$bin/sepolicy-inject -s init -t rootfs -c system -p module_load -P sepolicy;
+$bin/sepolicy-inject -s init -t system_file -c file -p mounton -P sepolicy;
+$bin/sepolicy-inject -s init -t vendor_configs_file -c file -p mounton -P sepolicy;
+$bin/sepolicy-inject -s init -t vendor_file -c file -p mounton -P sepolicy;
+$bin/sepolicy-inject -s modprobe -t rootfs -c system -p module_load -P sepolicy;
+
+# sepolicy_debug
+$bin/sepolicy-inject -s init -t rootfs -c file -p execute_no_trans -P sepolicy_debug;
+$bin/sepolicy-inject -s init -t rootfs -c system -p module_load -P sepolicy_debug;
+$bin/sepolicy-inject -s init -t system_file -c file -p mounton -P sepolicy_debug;
+$bin/sepolicy-inject -s init -t vendor_configs_file -c file -p mounton -P sepolicy_debug;
+$bin/sepolicy-inject -s init -t vendor_file -c file -p mounton -P sepolicy_debug;
+$bin/sepolicy-inject -s modprobe -t rootfs -c system -p module_load -P sepolicy_debug
+
 if [ "$os" == "oos" ]; then
-  # sepolicy
-  $bin/sepolicy-inject -s init -t rootfs -c file -p execute_no_trans -P sepolicy;
-  $bin/sepolicy-inject -s init -t rootfs -c system -p module_load -P sepolicy;
-  $bin/sepolicy-inject -s init -t system_file -c file -p mounton -P sepolicy;
-  $bin/sepolicy-inject -s init -t vendor_configs_file -c file -p mounton -P sepolicy;
-  $bin/sepolicy-inject -s init -t vendor_file -c file -p mounton -P sepolicy;
-  $bin/sepolicy-inject -s modprobe -t rootfs -c system -p module_load -P sepolicy;
-
-  # sepolicy_debug
-  $bin/sepolicy-inject -s init -t rootfs -c file -p execute_no_trans -P sepolicy_debug;
-  $bin/sepolicy-inject -s init -t rootfs -c system -p module_load -P sepolicy_debug;
-  $bin/sepolicy-inject -s init -t system_file -c file -p mounton -P sepolicy_debug;
-  $bin/sepolicy-inject -s init -t vendor_configs_file -c file -p mounton -P sepolicy_debug;
-  $bin/sepolicy-inject -s init -t vendor_file -c file -p mounton -P sepolicy_debug;
-  $bin/sepolicy-inject -s modprobe -t rootfs -c system -p module_load -P sepolicy_debug
-
   # Remove suspicious OnePlus services
   remove_section init.oem.rc "service OPNetlinkService" "seclabel"
   remove_section init.oem.rc "service wifisocket" "seclabel"
   remove_section init.oem.rc "service oemsysd" "seclabel"
   remove_section init.oem.rc "service oem_audio_device" "oneshot"
-  remove_section init.oem.rc "service smartadjust" "seclabel"
   remove_section init.oem.rc "service atrace" "seclabel"
   remove_section init.oem.rc "service sniffer_set" "seclabel"
   remove_section init.oem.rc "service sniffer_start" "seclabel"
@@ -101,9 +100,6 @@ if [ "$os" == "oos" ]; then
 else
   # Otherwise, just remove it
   rm -rf $ramdisk/modules
-  rm -rf $ramdisk/WCNSS_qcom_cfg.ini
-
-  append_file init.fk.rc "boot_wlan" wlan;
 fi
 
 # end ramdisk changes
