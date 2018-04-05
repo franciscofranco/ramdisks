@@ -68,20 +68,18 @@ insert_line init.rc "init.performance_profiles.rc" after "import /init.usb.rc" "
 insert_line init.rc "init.fk.rc" after "import /init.usb.rc" "import init.fk.rc";
 
 # sepolicy
-$bin/sepolicy-inject -s init -t rootfs -c file -p execute_no_trans -P sepolicy;
-$bin/sepolicy-inject -s init -t rootfs -c system -p module_load -P sepolicy;
-$bin/sepolicy-inject -s init -t system_file -c file -p mounton -P sepolicy;
-$bin/sepolicy-inject -s init -t vendor_configs_file -c file -p mounton -P sepolicy;
-$bin/sepolicy-inject -s init -t vendor_file -c file -p mounton -P sepolicy;
-$bin/sepolicy-inject -s modprobe -t rootfs -c system -p module_load -P sepolicy;
+$bin/magiskpolicy --load sepolicy --save sepolicy \
+  "allow init rootfs file execute_no_trans" \
+  "allow { init modprobe } rootfs system module_load" \
+  "allow init { system_file vendor_file vendor_configs_file } file mounton" \
+;
 
 # sepolicy_debug
-$bin/sepolicy-inject -s init -t rootfs -c file -p execute_no_trans -P sepolicy_debug;
-$bin/sepolicy-inject -s init -t rootfs -c system -p module_load -P sepolicy_debug;
-$bin/sepolicy-inject -s init -t system_file -c file -p mounton -P sepolicy_debug;
-$bin/sepolicy-inject -s init -t vendor_configs_file -c file -p mounton -P sepolicy_debug;
-$bin/sepolicy-inject -s init -t vendor_file -c file -p mounton -P sepolicy_debug;
-$bin/sepolicy-inject -s modprobe -t rootfs -c system -p module_load -P sepolicy_debug
+$bin/magiskpolicy --load sepolicy_debug --save sepolicy_debug \
+  "allow init rootfs file execute_no_trans" \
+  "allow { init modprobe } rootfs system module_load" \
+  "allow init { system_file vendor_file vendor_configs_file } file mounton" \
+;
 
 if [ "$os" == "oos" ]; then
   # Remove suspicious OnePlus services
