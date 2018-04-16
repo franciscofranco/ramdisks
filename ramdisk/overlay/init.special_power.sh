@@ -32,11 +32,13 @@ chmod 0664 /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
 chmod 0664 /sys/class/kgsl/kgsl-3d0/devfreq/max_freq
 chmod 0664 /sys/class/kgsl/kgsl-3d0/devfreq/min_freq
 
+write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor interactive
+
 write /sys/devices/system/cpu/cpufreq/interactive/enable_prediction 1
 write /sys/devices/system/cpu/cpufreq/interactive/above_hispeed_delay 0
 write /sys/devices/system/cpu/cpufreq/interactive/go_hispeed_load 100
 write /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq 0
-write /sys/devices/system/cpu/cpufreq/interactive/target_loads "75 1401600:60 1689600:70 1958400:85 2016000:95"
+write /sys/devices/system/cpu/cpufreq/interactive/target_loads "75 1689600:65 1958400:85 2016000:95"
 write /sys/devices/system/cpu/cpufreq/interactive/timer_rate 30000
 write /sys/devices/system/cpu/cpufreq/interactive/min_sample_time 30000
 write /sys/devices/system/cpu/cpufreq/interactive/ignore_hispeed_on_notif 0

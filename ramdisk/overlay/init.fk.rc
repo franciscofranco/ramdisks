@@ -38,6 +38,10 @@ on property:sys.boot_completed=1
     chown system system /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
     chown system system /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
 
+    # making sure when fucking roms try to apply some non-existent fucked up governor
+    # that we don't run into shit
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor interactive
+
     # I/O
     write /sys/block/sda/queue/read_ahead_kb 128
     write /sys/block/sda/queue/nr_requests 128
@@ -47,6 +51,9 @@ on property:sys.boot_completed=1
 
     # Set idle GPU to 133 Mhz
     write /sys/class/kgsl/kgsl-3d0/default_pwrlevel 6
+
+    write /proc/sys/vm/swappiness 100
+    write /sys/module/lowmemorykiller/parameters/minfree "18432,23040,27648,32256,36864,46080"
 
     exec u:r:init:s0 -- /init.special_power.sh
     exec u:r:su:s0 root root -- /init.supolicy.sh
