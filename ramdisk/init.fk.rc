@@ -61,7 +61,7 @@ on property:sys.boot_completed=1
     write /sys/devices/system/cpu/cpufreq/interactive/go_hispeed_load 100
     write /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq 0
     write /sys/devices/system/cpu/cpufreq/interactive/io_is_busy 1
-    write /sys/devices/system/cpu/cpufreq/interactive/target_loads "35 486000:40 702000:45 1026000:60 1134000:70 1242000:75 1458000:85 1512000:95"
+    write /sys/devices/system/cpu/cpufreq/interactive/target_loads "85 1134000:70 1242000:75 1458000:85 1512000:95"
     write /sys/devices/system/cpu/cpufreq/interactive/min_sample_time 40000
     write /sys/devices/system/cpu/cpufreq/interactive/timer_rate 20000
     write /sys/devices/system/cpu/cpufreq/interactive/max_freq_hysteresis 60000
@@ -71,20 +71,20 @@ on property:sys.boot_completed=1
     write /dev/cpuctl/cpu.notify_on_migrate 0
 
     # cpu-boost
-    write /sys/module/cpu_boost/parameters/input_boost_freq 1242000
-    write /sys/module/cpu_boost/parameters/input_boost_ms 40
+    write /sys/module/cpu_boost/parameters/input_boost_freq 1026000
+    write /sys/module/cpu_boost/parameters/input_boost_ms 1500
 
     # IO
-    write /sys/block/mmcblk0/queue/rq_affinity 0
     write /sys/block/mmcblk0/queue/add_random 0
-    write /sys/block/mmcblk0/bdi/min_ratio 5
     write /sys/block/mmcblk0/queue/read_ahead_kb 128
 
     # KSM
     write /sys/kernel/mm/ksm/sleep_millisecs 1500
     write /sys/kernel/mm/ksm/pages_to_scan 256
     write /sys/kernel/mm/ksm/deferred_timer 1
-    write /sys/kernel/mm/ksm/run 1
+    write /sys/kernel/mm/ksm/run 0
+
+    write /sys/module/lowmemorykiller/parameters/minfree "18432,23040,27648,32256,36864,46080"
 
     exec u:r:su:s0 root root -- /init.supolicy.sh
     exec u:r:supersu:s0 root root -- /init.supolicy.sh

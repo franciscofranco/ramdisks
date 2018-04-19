@@ -23,8 +23,8 @@ on property:fku.perf.profile=1
     write /sys/devices/system/cpu/cpu2/cpufreq/scaling_max_freq 1512000
     write /sys/devices/system/cpu/cpu3/cpufreq/scaling_max_freq 1512000
     write /sys/devices/system/cpu/cpufreq/interactive/timer_rate 20000
-    write /sys/module/cpu_boost/parameters/input_boost_freq 1242000
-    write /sys/module/cpu_boost/parameters/input_boost_ms 40
+    write /sys/module/cpu_boost/parameters/input_boost_freq 1026000
+    write /sys/module/cpu_boost/parameters/input_boost_ms 1500
     write /sys/class/kgsl/kgsl-3d0/max_pwrlevel 0
     write /sys/class/leds/lcd-backlight/max_brightness 255
 
