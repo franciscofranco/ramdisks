@@ -34,8 +34,10 @@ dump_boot;
 # begin ramdisk changes
 
 # fstab.bullhead
-insert_line fstab.bullhead "data           f2fs" after "data           ext4" "/dev/block/platform/soc.0/f9824900.sdhci/by-name/userdata     /data           f2fs    rw,nosuid,nodev,noatime,nodiratime,inline_xattr wait,formattable,encryptable=/dev/block/platform/soc.0/f9824900.sdhci/by-name/metadata";
-insert_line fstab.bullhead "cache          f2fs" after "cache          ext4" "/dev/block/platform/soc.0/f9824900.sdhci/by-name/cache        /cache          f2fs    rw,nosuid,nodev,noatime,nodiratime,inline_xattr wait,check,formattable";
+insert_line fstab.bullhead "data           f2fs" after "data           ext4" "/dev/block/platform/soc.0/f9824900.sdhci/by-name/userdata     /data           f2fs    rw,nosuid,nodev,lazytime,nodiratime,inline_xattr wait,formattable,encryptable=/dev/block/platform/soc.0/f9824900.sdhci/by-name/metadata";
+insert_line fstab.bullhead "cache          f2fs" after "cache          ext4" "/dev/block/platform/soc.0/f9824900.sdhci/by-name/cache        /cache          f2fs    rw,nosuid,nodev,lazytime,nodiratime,inline_xattr wait,check,formattable";
+patch_fstab fstab.bullhead data ext4 options "noatime" "lazytime";
+patch_fstab fstab.bullhead cache ext4 options "noatime" "lazytime";
 patch_fstab fstab.bullhead none swap flags "zramsize=533413200" "zramsize=1066826400";
 
 # init.bullhead.rc
