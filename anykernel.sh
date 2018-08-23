@@ -79,44 +79,10 @@ insert_line default.prop "ro.sys.fw.bg_apps_limit=60" before "ro.secure=1" "ro.s
 insert_line init.rc "init.performance_profiles.rc" after "import /init.usb.rc" "import init.performance_profiles.rc";
 insert_line init.rc "init.fk.rc" after "import /init.usb.rc" "import init.fk.rc";
 
-# If on OOS, we need the support to load the Wi-Fi module
+# If on OOS
 if [ "$os" == "oos" ]; then
-  # sepolicy
-  $bin/magiskpolicy --load sepolicy --save sepolicy \
-    "allow init rootfs file execute_no_trans" \
-    "allow { init modprobe } rootfs system module_load" \
-    "allow init { system_file vendor_file vendor_configs_file } file mounton" \
-  ;
-
-  # sepolicy_debug
-  $bin/magiskpolicy --load sepolicy_debug --save sepolicy_debug \
-    "allow init rootfs file execute_no_trans" \
-    "allow { init modprobe } rootfs system module_load" \
-    "allow init { system_file vendor_file vendor_configs_file } file mounton" \
-  ;
-
-  # Patch init.flash.rc to bind mount the Wi-Fi module on OxygenOS
-  prepend_file init.fk.rc "modules" modules;
-
   # Remove recovery service so that TWRP isn't overwritten
   remove_section init.rc "service flash_recovery" ""
-
-  # Remove suspicious OnePlus services
-  remove_section init.oem.rc "service OPNetlinkService" ""
-  remove_section init.oem.rc "service wifisocket" ""
-  remove_section init.oem.rc "service oemsysd" ""
-  remove_section init.oem.rc "service oem_audio_device" "oneshot"
-  remove_section init.oem.rc "service atrace" "seclabel"
-  remove_section init.oem.rc "service sniffer_set" ""
-  remove_section init.oem.rc "service sniffer_start" ""
-  remove_section init.oem.rc "service sniffer_stop" "seclabel"
-  remove_section init.oem.rc "service tcpdump-service" ""
-  remove_section init.oem.debug.rc "service oemlogkit" ""
-  remove_section init.oem.debug.rc "service dumpstate_log" ""
-  remove_section init.oem.debug.rc "service oemasserttip" ""
-else
-  # Otherwise, just remove it
-  rm -rf $ramdisk/modules
 fi;
 
 # end ramdisk changes

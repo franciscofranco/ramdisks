@@ -11,10 +11,6 @@ on late-fs
     write /sys/block/sde/queue/read_ahead_kb 2048
     write /sys/block/sde/queue/nr_requests 256 
 
-on post-fs
-    # bind mount wifi config file
-#    mount auto /WCNSS_qcom_cfg.ini /vendor/etc/wifi/WCNSS_qcom_cfg.ini bind
-
 on boot
     # update cpusets now that processors are up
     write /dev/cpuset/top-app/cpus 0-7
@@ -22,12 +18,6 @@ on boot
     write /dev/cpuset/foreground/boost/cpus 0-7
     write /dev/cpuset/background/cpus 0-7
     write /dev/cpuset/system-background/cpus 0-7
-
-    # bind mount custom wifi module
-#    rmmod wlan.ko
-#    mount auto /modules/wlan.ko /system/lib/modules/wlan.ko bind
-#    mount auto /modules/wlan.ko /vendor/lib/modules/wlan.ko bind
-#    exec u:r:modprobe:s0 -- /vendor/bin/modprobe -a -d /vendor/lib/modules wlan
 
 on property:sys.boot_completed=1
     # allows FKUpdater to know this feature is supported

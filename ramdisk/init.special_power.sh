@@ -97,6 +97,7 @@ SEEMP_HEALTHD=`pidof seemp_healthd`
 ESEPMDAEMON=`pidof esepmdaemon`
 WPA_SUPPLICANT=`pidof wpa_supplicant`
 SEEMPD=`pidof seempd`
+EMBRYO=`pidof embryo`
 
 writepid_sbg $QSEECOMD
 writepid_sbg $THERMAL-ENGINE
@@ -123,5 +124,6 @@ writepid_sbg $SEEMP_HEALTHD
 writepid_sbg $ESEPMDAEMON
 writepid_sbg $WPA_SUPPLICANT
 writepid_sbg $SEEMPD
+writepid_sbg $EMBRYO
 
 }&
