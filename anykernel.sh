@@ -4,7 +4,7 @@
 ## AnyKernel setup
 # begin properties
 properties() {
-kernel.string=Franco Kernel by franciscofranco @ xda-developers
+kernel.string=FrancoKernel by franciscofranco @ xda-developers
 do.devicecheck=1
 do.modules=0
 do.cleanup=1
@@ -29,42 +29,32 @@ ramdisk_compression=auto;
 ## AnyKernel file attributes
 # set permissions/ownership for included ramdisk files
 chmod -R 750 $ramdisk/*;
-chmod 644 $ramdisk/WCNSS_qcom_cfg.ini;
-chmod 644 $ramdisk/modules/*;
 chown -R root:root $ramdisk/*;
 
-# Print message and exit
-die() {
-  ui_print " "; ui_print "$*";
-  exit 1;
-}
-
-
-# Don't even think about flashing on non-Treble
-treble=$(file_getprop /system/build.prop "ro.treble.enabled");
-if [ ! -z $treble -a $treble == "false" ]; then
-  die "FrancoKernel is only compatible with Treble stock rom OxygenOS 5.1.5, newer, or recent LineageOS 15.1 roms (or basically any recent rom with Treble support)!";
-fi;
 
 ## AnyKernel install
+# don't even think about flashing on non-Treble
+is_treble=$(file_getprop /system/build.prop "ro.treble.enabled");
+if [ ! "$is_treble" -o "$is_treble" == "false" ]; then
+  ui_print " ";
+  ui_print "FrancoKernel is only compatible with Treble stock ROM OxygenOS 5.1.5, newer, or recent LineageOS 15.1 ROMs (or basically any recent ROM with Treble support)!";
+  exit 1;
+fi;
+
 # alert of unsupported Android version
-android_ver=$(grep "^ro.build.version.release" /system/build.prop | cut -d= -f2);
+android_ver=$(file_getprop /system/build.prop "ro.build.version.release");
 case "$android_ver" in
-  "8.0.0"|"8.1.0") support_status="supported";;
+  8.0.0|8.1.0) support_status="supported";;
   *) support_status="unsupported";;
 esac;
 ui_print " ";
-ui_print "Running Android $android_ver..."
+ui_print "Running Android $android_ver...";
 ui_print "This kernel is $support_status for this version!";
 
-userflavor="$(grep "^ro.build.user" /system/build.prop | cut -d= -f2):$(grep "^ro.build.flavor" /system/build.prop | cut -d= -f2)";
+userflavor="$(file_getprop /system/build.prop "ro.build.user"):$(file_getprop /system/build.prop "ro.build.flavor")";
 case "$userflavor" in
-  "OnePlus:OnePlus5-user"|"OnePlus:OnePlus5T-user")
-    os="oos";
-    os_string="OxygenOS";;
-  *)
-    os="custom";
-    os_string="a custom ROM";;
+  OnePlus:OnePlus5-user|OnePlus:OnePlus5T-user) os="oos"; os_string="OxygenOS";;
+  *) os="custom"; os_string="a custom ROM";;
 esac;
 ui_print " ";
 ui_print "You are on $os_string!";
@@ -73,19 +63,29 @@ dump_boot;
 
 # begin ramdisk changes
 
+# default.prop
 insert_line default.prop "ro.sys.fw.bg_apps_limit=60" before "ro.secure=1" "ro.sys.fw.bg_apps_limit=60";
 
 # init.rc
 insert_line init.rc "init.performance_profiles.rc" after "import /init.usb.rc" "import init.performance_profiles.rc";
 insert_line init.rc "init.fk.rc" after "import /init.usb.rc" "import init.fk.rc";
-
-# If on OOS
 if [ "$os" == "oos" ]; then
-  # Remove recovery service so that TWRP isn't overwritten
-  remove_section init.rc "service flash_recovery" ""
+  # if on OOS remove recovery service so that TWRP isn't overwritten
+  remove_section init.rc "service flash_recovery" "";
 fi;
 
 # end ramdisk changes
+
+# hexpatch the kernel if Magisk is installed ('skip_initramfs' -> 'want_initramfs')
+if [ -d .backup ]; then
+  ui_print " "; ui_print "Magisk detected! Patching kernel so reflashing Magisk is not necessary...";
+  $bin/magiskboot --decompress /tmp/anykernel/Image.gz /tmp/anykernel/Image;
+  $bin/magiskboot --hexpatch /tmp/anykernel/Image 736B69705F696E697472616D6673 77616E745F696E697472616D6673;
+  $bin/magiskboot --compress /tmp/anykernel/Image /tmp/anykernel/Image.gz;
+  $bin/magiskboot --dtb-patch /tmp/anykernel/dtb;
+  cat /tmp/anykernel/Image.gz /tmp/anykernel/dtb > /tmp/anykernel/Image.gz-dtb;
+  rm -f /tmp/anykernel/Image /tmp/anykernel/Image.gz /tmp/anykernel/dtb;
+fi;
 
 write_boot;
 
