@@ -4,7 +4,7 @@
 ## AnyKernel setup
 # begin properties
 properties() {
-kernel.string=Franco Kernel by franciscofranco @ xda-developers
+kernel.string=FrancoKernel by franciscofranco @ xda-developers
 do.devicecheck=1
 do.modules=0
 do.cleanup=1
@@ -23,7 +23,6 @@ ramdisk_compression=auto;
 
 ## end setup
 
-
 ## AnyKernel methods (DO NOT CHANGE)
 # import patching functions/variables - see for reference
 . /tmp/anykernel/tools/ak2-core.sh;
@@ -33,19 +32,23 @@ ramdisk_compression=auto;
 chmod -R 750 $ramdisk/*;
 chown -R root:root $ramdisk/*;
 
-
 ## AnyKernel install
+# don't even think about flashing on non-Treble
+is_treble=$(file_getprop /system/build.prop "ro.treble.enabled");
+if [ ! "$is_treble" -o "$is_treble" == "false" ]; then
+  ui_print " ";
+  ui_print "FrancoKernel is only compatible with Treble roms such as LineageOS!";
+  exit 1;
+fi;
+
 dump_boot;
 
 # begin ramdisk changes
 
-# init.rc
-insert_line fstab.qcom "/dev/block/zram0" after "/dev/block/bootdevice/by-name/config		/frp			emmc	defaults							defaults" "/dev/block/zram0                                        none                swap    defaults                    zramsize=536870912,max_comp_streams=4"
-insert_line init.rc "init.fk.rc" before "import /init.usb.rc" "import /init.fk.rc";
-insert_line init.rc "performance_profiles" before "import /init.usb.rc" "import /init.performance_profiles.rc";
-
 # sepolicy
-$bin/sepolicy-inject -s init -t rootfs -c file -p execute_no_trans -P sepolicy;
+$bin/magiskpolicy --load sepolicy --save sepolicy \
+  "allow init rootfs file execute_no_trans" \
+;
 
 # end ramdisk changes
 
