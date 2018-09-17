@@ -1,2 +1,5 @@
 fk_tissot.zip
 zImage
+dtbs/
+kernel/
+tools/
