@@ -44,7 +44,7 @@ fi;
 # alert of unsupported Android version
 android_ver=$(file_getprop /system/build.prop "ro.build.version.release");
 case "$android_ver" in
-  8.0.0|8.1.0) support_status="supported";;
+  8.1.0) support_status="supported";;
   *) support_status="unsupported";;
 esac;
 ui_print " ";
@@ -75,17 +75,6 @@ if [ "$os" == "oos" ]; then
 fi;
 
 # end ramdisk changes
-
-# hexpatch the kernel if Magisk is installed ('skip_initramfs' -> 'want_initramfs')
-if [ -d .backup ]; then
-  ui_print " "; ui_print "Magisk detected! Patching kernel so reflashing Magisk is not necessary...";
-  $bin/magiskboot --decompress /tmp/anykernel/Image.gz /tmp/anykernel/Image;
-  $bin/magiskboot --hexpatch /tmp/anykernel/Image 736B69705F696E697472616D6673 77616E745F696E697472616D6673;
-  $bin/magiskboot --compress /tmp/anykernel/Image /tmp/anykernel/Image.gz;
-  $bin/magiskboot --dtb-patch /tmp/anykernel/dtb;
-  cat /tmp/anykernel/Image.gz /tmp/anykernel/dtb > /tmp/anykernel/Image.gz-dtb;
-  rm -f /tmp/anykernel/Image /tmp/anykernel/Image.gz /tmp/anykernel/dtb;
-fi;
 
 write_boot;
 

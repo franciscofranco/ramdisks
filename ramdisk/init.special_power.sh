@@ -50,7 +50,7 @@ chmod 0664 /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor
 chmod 0664 /sys/class/kgsl/kgsl-3d0/devfreq/max_freq
 chmod 0664 /sys/class/kgsl/kgsl-3d0/devfreq/min_freq
 
-write /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq 1958400
+write /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq 2112000
 
 write /sys/devices/system/cpu/cpu0/cpufreq/interactive/above_hispeed_delay 0
 write /sys/devices/system/cpu/cpu0/cpufreq/interactive/go_hispeed_load 100
@@ -67,8 +67,8 @@ write /sys/devices/system/cpu/cpu4/cpufreq/interactive/timer_rate 30000
 write /sys/devices/system/cpu/cpu4/cpufreq/interactive/min_sample_time 19000
 write /sys/devices/system/cpu/cpu4/cpufreq/interactive/max_freq_hysteresis 39000
 
-write /sys/module/cpu_boost/parameters/input_boost_freq "0:1036800 4:729600"
-write /sys/module/cpu_boost/parameters/input_boost_ms 1500
+#write /sys/module/cpu_boost/parameters/input_boost_freq "0:1478400 4:729600"
+#write /sys/module/cpu_boost/parameters/input_boost_ms 500
 
 sleep 20
 
