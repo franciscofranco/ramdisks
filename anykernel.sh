@@ -49,7 +49,7 @@ if [ -f $compressed_image ]; then
   fi;
 
   # Concatenate all of the dtbs to the kernel
-  cat $compressed_image /tmp/anykernel/dtbs/*.dtb > /tmp/anykernel/Image.gz-dtb;
+  cat $compressed_image /tmp/anykernel/dtbs/dtb > /tmp/anykernel/Image.gz-dtb;
 fi;
 
 # end ramdisk changes
