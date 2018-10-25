@@ -17,7 +17,9 @@ function writepid_sbg() {
 }
 ################################################################################
 
-sleep 5
+{
+
+sleep 10
 
 MDM_HELPER=`pidof mdm_helper`
 BRIDGEMGRD=`pidof bridgemgrd`
@@ -52,3 +54,5 @@ writepid_sbg $MDM_HELPER_PROXY
 writepid_sbg $CND
 writepid_sbg $LOGCAT
 writepid_sbg $LMKD
+
+}&
