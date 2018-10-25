@@ -13,6 +13,7 @@ do.cleanuponabort=1
 device.name1=oneplus3t
 device.name2=OnePlus3T
 device.name3=OnePlus3
+device.name4=oneplus3
 }
 
 # shell variables
@@ -43,12 +44,14 @@ ui_print "This kernel is $support_status for this version!";
 ## AnyKernel install
 dump_boot;
 
+# sepolicy
+$bin/magiskpolicy --load sepolicy --save sepolicy \
+  "allow init rootfs file execute_no_trans" \
+;
+
 # begin ramdisk changes
 
 # init.rc
-remove_line init.rc "import init.fk.rc";
-remove_line init.rc "import init.performance_profiles.rc";
-
 insert_line init.rc "init.fk.rc" after "import /init.usb.rc" "import /init.fk.rc";
 insert_line init.rc "performance_profiles" after "import /init.usb.rc" "import /init.performance_profiles.rc";
 insert_line default.prop "ro.sys.fw.bg_apps_limit=60" before "ro.oxygen.version" "ro.sys.fw.bg_apps_limit=60";
