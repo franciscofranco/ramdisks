@@ -2,7 +2,7 @@
 
 SULIBS="/su/lib:/sbin/supersu/lib:/system/lib64:/system/lib"
 
-for SUPOLICY in `which supolicy sepolicy-inject`;
+for SUPOLICY in `which magiskpolicy supolicy sepolicy-inject`;
 do
 	LD_LIBRARY_PATH=$SULIBS $SUPOLICY --live \
         "allow ssr device dir read" \

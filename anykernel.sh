@@ -46,7 +46,10 @@ replace_string init.angler.rc "#    verity_load_state" "    verity_load_state" "
 replace_string init.angler.rc "#    verity_update_state" "    verity_update_state" "#    verity_update_state";
 replace_section init.angler.rc "service atfwd" " " "service atfwd /system/bin/ATFWD-daemon\n    disabled\n    class late_start\n    user system\n    group system radio\n";
 
-$bin/sepolicy-inject -s init -t rootfs -c file -p execute_no_trans -P sepolicy;
+# sepolicy
+$bin/magiskpolicy --load sepolicy --save sepolicy \
+  "allow init rootfs file execute_no_trans" \
+;
 
 # end ramdisk changes
 
