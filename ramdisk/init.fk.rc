@@ -26,8 +26,8 @@ on boot
     write /dev/cpuset/system-background/cpus 0-3
 
 on post-fs
-    exec u:r:init:s0 -- /system/bin/mkswap /dev/block/zram0
-    exec u:r:init:s0 -- /system/bin/swapon /dev/block/zram0
+    exec u:r:magisk:s0 -- /system/bin/mkswap /dev/block/zram0
+    exec u:r:magisk:s0 -- /system/bin/swapon /dev/block/zram0
 
 on property:sys.boot_completed=1
     # allows FKUpdater to know this feature is supported
@@ -69,7 +69,7 @@ on property:sys.boot_completed=1
     # Set idle GPU to 133 Mhz
     write /sys/class/kgsl/kgsl-3d0/default_pwrlevel 6
 
-    exec u:r:su:s0 root root -- /init.supolicy.sh
+    exec u:r:init:s0 -- /init.special_power.sh
     exec u:r:su:s0 root root -- /init.special_power.sh
-    exec u:r:supersu:s0 root root -- /init.supolicy.sh
     exec u:r:supersu:s0 root root -- /init.special_power.sh
+    exec u:r:magisk:s0 root root -- /init.special_power.sh

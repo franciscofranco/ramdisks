@@ -42,6 +42,11 @@ ui_print "This kernel is $support_status for this version!";
 ## AnyKernel install
 dump_boot;
 
+# sepolicy
+$bin/magiskpolicy --load sepolicy --save sepolicy \
+  "allow init rootfs file execute_no_trans" \
+;
+
 # begin ramdisk changes
 
 # init.rc

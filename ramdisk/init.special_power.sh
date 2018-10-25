@@ -70,9 +70,10 @@ write /sys/devices/system/cpu/cpu2/cpufreq/interactive/timer_rate 30000
 write /sys/devices/system/cpu/cpu2/cpufreq/interactive/ignore_hispeed_on_notif 0
 write /sys/devices/system/cpu/cpu2/cpufreq/interactive/min_sample_time 19000
 write /sys/devices/system/cpu/cpu2/cpufreq/interactive/max_freq_hysteresis 39000
+write /sys/devices/system/cpu/cpu2/cpufreq/interactive/go_hispeed_load 99
 
 write /sys/module/cpu_boost/parameters/input_boost_freq "0:1228800 2:883200"
-write /sys/module/cpu_boost/parameters/input_boost_duration 150
+write /sys/module/cpu_boost/parameters/input_boost_ms 500
 
 # Setting b.L scheduler parameters
 write /proc/sys/kernel/sched_downmigrate 90
