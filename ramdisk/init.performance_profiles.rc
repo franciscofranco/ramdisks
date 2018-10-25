@@ -7,8 +7,8 @@ on property:fku.perf.profile=0
     write /sys/devices/system/cpu/cpu1/cpufreq/scaling_max_freq 1497600
     write /sys/devices/system/cpu/cpu2/cpufreq/scaling_max_freq 729600
     write /sys/devices/system/cpu/cpu3/cpufreq/scaling_max_freq 729600
-    write /sys/module/cpu_boost/parameters/input_boost_freq 1190400
-    write /sys/module/cpu_boost/parameters/input_boost_ms 250
+    write /sys/module/cpu_boost/parameters/input_boost_freq 729600
+    write /sys/module/cpu_boost/parameters/input_boost_ms 1500
     write /sys/class/kgsl/kgsl-3d0/max_pwrlevel 3
     write /sys/class/leds/lcd-backlight/max_brightness 100    
 
@@ -21,8 +21,8 @@ on property:fku.perf.profile=1
     write /sys/devices/system/cpu/cpu1/cpufreq/scaling_max_freq 2265600
     write /sys/devices/system/cpu/cpu2/cpufreq/scaling_max_freq 2265600
     write /sys/devices/system/cpu/cpu3/cpufreq/scaling_max_freq 2265600
-    write /sys/module/cpu_boost/parameters/input_boost_freq 1497600
-    write /sys/module/cpu_boost/parameters/input_boost_ms 150
+    write /sys/module/cpu_boost/parameters/input_boost_freq 1190400
+    write /sys/module/cpu_boost/parameters/input_boost_ms 1500
     write /sys/class/kgsl/kgsl-3d0/max_pwrlevel 0
     write /sys/class/leds/lcd-backlight/max_brightness 255
 
@@ -36,6 +36,6 @@ on property:fku.perf.profile=2
     write /sys/devices/system/cpu/cpu2/cpufreq/scaling_max_freq 2265600
     write /sys/devices/system/cpu/cpu3/cpufreq/scaling_max_freq 2265600
     write /sys/module/cpu_boost/parameters/input_boost_freq 1728000
-    write /sys/module/cpu_boost/parameters/input_boost_ms 1500
+    write /sys/module/cpu_boost/parameters/input_boost_ms 2000
     write /sys/class/kgsl/kgsl-3d0/max_pwrlevel 0
     write /sys/class/leds/lcd-backlight/max_brightness 255
