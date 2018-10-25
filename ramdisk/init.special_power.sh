@@ -27,7 +27,28 @@ function writepid_top_app() {
 }
 ################################################################################
 
+{
+
 sleep 10
+
+# display kcal calibration
+chmod 0664 /sys/devices/platform/kcal_ctrl.0/kcal
+chmod 0664 /sys/devices/platform/kcal_ctrl.0/kcal_cont
+chmod 0664 /sys/devices/platform/kcal_ctrl.0/kcal_hue
+chmod 0664 /sys/devices/platform/kcal_ctrl.0/kcal_sat
+chmod 0664 /sys/devices/platform/kcal_ctrl.0/kcal_val
+
+# cpu
+chmod 0664 /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+chmod 0664 /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq
+chmod 0664 /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+chmod 0664 /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq
+chmod 0664 /sys/devices/system/cpu/cpu4/cpufreq/scaling_min_freq
+chmod 0664 /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor
+
+# gpu
+chmod 0664 /sys/class/kgsl/kgsl-3d0/devfreq/max_freq
+chmod 0664 /sys/class/kgsl/kgsl-3d0/devfreq/min_freq
 
 write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 307200
 write /sys/devices/system/cpu/cpu2/cpufreq/scaling_min_freq 307200
@@ -49,9 +70,10 @@ write /sys/devices/system/cpu/cpu2/cpufreq/interactive/timer_rate 30000
 write /sys/devices/system/cpu/cpu2/cpufreq/interactive/ignore_hispeed_on_notif 0
 write /sys/devices/system/cpu/cpu2/cpufreq/interactive/min_sample_time 19000
 write /sys/devices/system/cpu/cpu2/cpufreq/interactive/max_freq_hysteresis 39000
+write /sys/devices/system/cpu/cpu2/cpufreq/interactive/go_hispeed_load 99
 
 write /sys/module/cpu_boost/parameters/input_boost_freq "0:1228800 2:883200"
-write /sys/module/cpu_boost/parameters/input_boost_duration 150
+write /sys/module/cpu_boost/parameters/input_boost_ms 500
 
 # Setting b.L scheduler parameters
 write /proc/sys/kernel/sched_downmigrate 90
@@ -100,3 +122,5 @@ writepid_sbg $QSEEPROXYDAEMON
 writepid_sbg $IFAADAEMON
 writepid_sbg $LOGCAT
 writepid_sbg $LMKD
+
+}&
