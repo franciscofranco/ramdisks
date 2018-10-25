@@ -31,6 +31,11 @@ chown -R root:root $ramdisk/*;
 ## AnyKernel install
 dump_boot;
 
+# sepolicy
+$bin/magiskpolicy --load sepolicy --save sepolicy \
+  "allow init rootfs file execute_no_trans" \
+;
+
 # begin ramdisk changes
 
 # fstab.bullhead
