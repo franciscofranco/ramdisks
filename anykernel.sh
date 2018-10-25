@@ -51,7 +51,9 @@ replace_string init.qcom.rc "#start atfwd" "start atfwd" "#start atfwd";
 replace_string init.qcom.rc "#start config-zram" "start config-zram" "#start config-zram";
 
 # sepolicy
-$bin/sepolicy-inject -s init -t rootfs -c file -p execute_no_trans -P sepolicy;
+$bin/magiskpolicy --load sepolicy --save sepolicy \
+  "allow init rootfs file execute_no_trans" \
+;
 
 # end ramdisk changes
 

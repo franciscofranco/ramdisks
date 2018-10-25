@@ -4,7 +4,13 @@ on post-fs
     write /sys/block/zram0/disksize 533413200
 
     write /proc/sys/vm/page-cluster 0
-    write /proc/sys/vm/swappiness 60
+
+on late-fs
+    write /sys/block/mmcblk0/queue/read_ahead_kb 2048
+
+on post-fs
+    exec u:r:init:s0 -- /system/bin/mkswap /dev/block/zram0
+    exec u:r:init:s0 -- /system/bin/swapon /dev/block/zram0
 
 on property:sys.boot_completed=1
     # allows FKUpdater to know this feature is supported
@@ -51,6 +57,9 @@ on property:sys.boot_completed=1
     chmod 0664 /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
     chmod 0664 /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor
 
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor interactive
+    write /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor interactive
+
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/use_sched_load 0
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/above_hispeed_delay 0
     write /sys/devices/system/cpu/cpu0/cpufreq/interactive/go_hispeed_load 100
@@ -83,10 +92,8 @@ on property:sys.boot_completed=1
     write /sys/devices/system/cpu/cpu4/sched_mostly_idle_freq 0
 
     # I/O
-    write /sys/block/mmcblk0/queue/rq_affinity 0
-    write /sys/block/mmcblk0/queue/add_random 0
-    write /sys/block/mmcblk0/bdi/min_ratio 5
     write /sys/block/mmcblk0/queue/read_ahead_kb 128
+    write /proc/sys/vm/swappiness 100
     
     # ksm
     write /sys/kernel/mm/ksm/sleep_millisecs 1500
@@ -104,6 +111,8 @@ on property:sys.boot_completed=1
 
     # Prevent mmc from scaling its clk down when performing writes
     write /sys/class/mmc_host/mmc0/clk_scaling/scale_down_in_low_wr_load 1
+
+    write /sys/module/lowmemorykiller/parameters/minfree "18432,23040,27648,32256,36864,46080"
 
     exec u:r:init:s0 -- /init.special_power.sh
     exec u:r:su:s0 root root -- /init.supolicy.sh

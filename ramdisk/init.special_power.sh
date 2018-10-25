@@ -47,6 +47,9 @@ get-set-forall /sys/class/devfreq/qcom,cpubw*/bw_hwmon/up_scale 250
 get-set-forall /sys/class/devfreq/qcom,cpubw*/bw_hwmon/idle_mbps 1600
 get-set-forall /sys/class/devfreq/qcom,mincpubw*/governor cpufreq
 
+write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor interactive
+write /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor interactive
+
 write /sys/devices/system/cpu/cpu0/cpufreq/interactive/use_sched_load 0
 write /sys/devices/system/cpu/cpu0/cpufreq/interactive/above_hispeed_delay 0
 write /sys/devices/system/cpu/cpu0/cpufreq/interactive/go_hispeed_load 100
