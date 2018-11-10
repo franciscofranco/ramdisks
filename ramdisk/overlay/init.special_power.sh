@@ -29,6 +29,9 @@ write /sys/devices/system/cpu/cpu4/cpufreq/scaling_max_freq 2169600;
 
 write /sys/devices/system/cpu/cpu0/cpufreq/schedutil/hispeed_freq 0;
 write /sys/devices/system/cpu/cpu4/cpufreq/schedutil/hispeed_freq 0;
+# Enable iowait boost to ramp up the CPU on repeated iowait wakeups
+write /sys/devices/system/cpu/cpu0/cpufreq/schedutil/iowait_boost_enable 1;
+write /sys/devices/system/cpu/cpu4/cpufreq/schedutil/iowait_boost_enable 1;
 
 #write /sys/module/cpu_boost/parameters/input_boost_freq "0:1056000 4:979200";
 #write /sys/module/cpu_boost/parameters/input_boost_ms 1500;

@@ -30,13 +30,16 @@ ramdisk_compression=auto;
 chmod -R 750 $ramdisk/*;
 chown -R root:root $ramdisk/*;
 
+# Save the users from themselves
+android_version="$(file_getprop /system/build.prop "ro.build.version.release")";
+supported_version=9;
+if [ "$android_version" != "$supported_version" ]; then
+  ui_print " "; ui_print "You are on $android_version but this kernel is only for $supported_version!";
+  exit 1;
+fi;
+
 ## AnyKernel install
 dump_boot;
-
-# sepolicy
-$bin/magiskpolicy --load sepolicy --save sepolicy \
-  "allow init rootfs file execute_no_trans" \
-;
 
 # If the kernel image and dtbs are separated in the zip
 decompressed_image=/tmp/anykernel/kernel/Image
@@ -46,13 +49,17 @@ if [ -f $compressed_image ]; then
   if [ -d $ramdisk/.backup ]; then
     ui_print " "; ui_print "Magisk detected! Patching kernel so reflashing Magisk is not necessary...";
     $bin/magiskboot --decompress $compressed_image $decompressed_image;
-    $bin/magiskboot --hexpatch $decompressed_image 736B69705F696E697472616D6673 77616E745F696E697472616D6673;
+    $bin/magiskboot --hexpatch $decompressed_image 736B69705F696E697472616D667300 77616E745F696E697472616D667300;
     $bin/magiskboot --compress=gzip $decompressed_image $compressed_image;
   fi;
 
   # Concatenate all of the dtbs to the kernel
   cat $compressed_image /tmp/anykernel/dtbs/*.dtb > /tmp/anykernel/Image.gz-dtb;
 fi;
+
+
+# Clean up other kernels' ramdisk overlay files
+rm -rf $ramdisk/overlay;
 
 # Install the boot image
 write_boot;
