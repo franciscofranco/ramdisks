@@ -57,9 +57,14 @@ if [ -f $compressed_image ]; then
   cat $compressed_image /tmp/anykernel/dtbs/*.dtb > /tmp/anykernel/Image.gz-dtb;
 fi;
 
-
 # Clean up other kernels' ramdisk overlay files
 rm -rf $ramdisk/overlay;
+
+# Add our ramdisk files if Magisk is installed
+if [ -d $ramdisk/.backup ]; then
+  ui_print " "; ui_print "Adding our ramdisk files...";
+  mv /tmp/anykernel/overlay $ramdisk;
+fi
 
 # Install the boot image
 write_boot;
