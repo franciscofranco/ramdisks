@@ -25,11 +25,6 @@ ramdisk_compression=auto;
 # import patching functions/variables - see for reference
 . /tmp/anykernel/tools/ak2-core.sh;
 
-## AnyKernel file attributes
-# set permissions/ownership for included ramdisk files
-chmod -R 750 $ramdisk/*;
-chown -R root:root $ramdisk/*;
-
 # Save the users from themselves
 android_version="$(file_getprop /system/build.prop "ro.build.version.release")";
 supported_version=9;
@@ -65,6 +60,11 @@ if [ -d $ramdisk/.backup ]; then
   ui_print " "; ui_print "Adding our ramdisk files...";
   mv /tmp/anykernel/overlay $ramdisk;
 fi
+
+## AnyKernel file attributes
+# set permissions/ownership for included ramdisk files
+chmod -R 750 $ramdisk/*;
+chown -R root:root $ramdisk/*;
 
 # Install the boot image
 write_boot;
